@@ -1,0 +1,20 @@
+/* Modern8-bits foundations, mapped to portfolio roles.
+   Source: modern8-bits-up.vercel.app/?path=/docs/foundation-design-token--docs
+   Cyan, lime and yellow are editorial accents from the supplied recording. */
+:root {
+  color-scheme: light;
+  --font-display: 'Space Grotesk', Arial, sans-serif;
+  --font-body: 'IBM Plex Sans', Arial, sans-serif;
+  --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
+  --page: #ffffff; --card: #ffffff; --ink: #000000; --muted: #666666;
+  --border: #d6d6d6; --hover: #e0e1e3; --action: #000000;
+  --on-action: #ffffff; --action-hover: #292929;
+  --accent-cyan: #51d6ed; --accent-lime: #b3ed67; --accent-yellow: #ffdb57;
+  --gutter: 32px; --motion: 240ms ease;
+}
+[data-theme='dark'] {
+  color-scheme: dark;
+  --page: #111111; --card: #292929; --ink: #ffffff; --muted: #d6d6d6;
+  --border: #666666; --hover: #3a3b3d; --action: #ffffff;
+  --on-action: #000000; --action-hover: #eeeeee;
+}
