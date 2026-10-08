@@ -1,6 +1,6 @@
 # Ellen Wang portfolio
 
-A responsive React portfolio combining the supplied recording's editorial layout, Ellen Wang's published content, and Modern8-bits foundations.
+A responsive React and TypeScript portfolio combining the supplied recording's editorial layout, Ellen Wang's published content, and Modern8-bits foundations.
 
 [Live website](https://ellenwang918.github.io/portfolio-v2/) · [GitHub repository](https://github.com/ellenWang918/portfolio-v2)
 
@@ -13,6 +13,7 @@ The local preview runs at http://localhost:4173/ when started on port 4173.
 ```sh
 npm install
 npm run dev -- --port 4173
+npm run typecheck
 npm run build
 npm run preview
 ```
@@ -28,7 +29,9 @@ npm run preview
 
 ## Editing
 
-`src/data/projects.json` contains the original case-study copy and metadata. `src/App.jsx` contains the homepage narrative and page components. `src/tokens.css` maps the design foundations; `src/portfolio.css` contains layout and responsive styling. Original artwork is in `public/assets`, and fonts are in `public/fonts`.
+`src/data/projects.json` contains the original case-study copy and metadata. `src/App.tsx` contains the homepage narrative and typed page components, and `src/main.tsx` is the app entry point. `src/tokens.css` maps the design foundations; `src/portfolio.css` contains layout and responsive styling. Original artwork is in `public/assets`, and fonts are in `public/fonts`.
+
+`npm run typecheck` checks the app and `vite.config.ts` with strict TypeScript settings. The production build runs this check before bundling. The Sites worker, build adapter, and hosting tests remain JavaScript for hosting compatibility.
 
 Example case-study URL: `/?project=design-system-palms`.
 

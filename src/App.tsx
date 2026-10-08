@@ -1,9 +1,18 @@
 import { useEffect, useRef, useState } from 'react';
+import type { KeyboardEvent } from 'react';
+import type { Icon as PhosphorIcon } from '@phosphor-icons/react';
 import { Eye, Stack, Sparkle, MapPin, Sun, Moon, X, Plus, Pause, Play, EnvelopeSimple, LinkedinLogo, GithubLogo, MagnifyingGlass, Compass, GridFour, Check, Copy, CaretRight, CaretUp } from '@phosphor-icons/react';
 import projects from './data/projects.json';
 
 const email = 'ellenwang918@gmail.com';
-const assetUrl = path => `${import.meta.env.BASE_URL}${path.replace(/^\//, '')}`;
+const assetUrl = (path: string) => `${import.meta.env.BASE_URL}${path.replace(/^\//, '')}`;
+type Theme = 'light' | 'dark';
+type ProjectId = (typeof projects)[number]['id'];
+type ProjectAction = (id: ProjectId) => void;
+type InlineAccentProps = { tone: 'cyan' | 'lime' | 'yellow'; Icon: PhosphorIcon; className?: string };
+type ProjectArtworkProps = { index: number; className?: string };
+type ProjectCardProps = { index: number; onOpen: ProjectAction };
+type CaseStudyProps = { id: ProjectId; onClose: () => void; onChange: ProjectAction };
 const socials = [
   { label: 'LinkedIn', url: 'https://www.linkedin.com/in/zi-wang-456923171/', Icon: LinkedinLogo },
   { label: 'GitHub', url: 'https://github.com/ellenWang918', Icon: GithubLogo },
@@ -21,17 +30,17 @@ const expertise = [
   { name: 'Product', Icon: Compass, title: 'Make complexity usable.', text: 'I turn complex workflows into clear interactions and testable prototypes. Working closely with engineering, I balance user needs with technical feasibility to shape an achievable first release.', skills: ['Product strategy', 'Interaction design', 'Prototyping'], project: 3 },
   { name: 'Systems', Icon: GridFour, title: 'Build clarity that scales.', text: 'A design system connects components, people and delivery practices. I create reusable foundations, practical documentation and shared workflows to keep design and development aligned.', skills: ['Design systems', 'Documentation', 'Design governance'], project: 0 },
 ];
-function InlineAccent({ tone, Icon, className = '' }) {
+function InlineAccent({ tone, Icon, className = '' }: InlineAccentProps) {
   return <span className={`inline-accent accent-${tone} ${className}`} aria-hidden="true"><Icon weight="bold" /></span>;
 }
-function ProjectArtwork({ index, className = '' }) {
+function ProjectArtwork({ index, className = '' }: ProjectArtworkProps) {
   return <div className={`artwork artwork-${index} ${className}`}>
     <span className="artwork-label" aria-hidden="true">{outcomes[index].category}</span>
     {index === 0 ? <img className="system-shot" src={assetUrl('/assets/design-foundations.png')} alt="Illustrative design system foundations: colour, typography and components" loading="lazy" /> : <img className="editorial-art" src={assetUrl(projects[index].hero.src)} alt={projects[index].hero.alt} loading="lazy" />}
     <span className="artwork-index" aria-hidden="true">0{index + 1}</span>
   </div>;
 }
-function ProjectCard({ index, onOpen }) {
+function ProjectCard({ index, onOpen }: ProjectCardProps) {
   const project = projects[index];
   return <button className={`project-card ${index === 4 ? 'project-card-wide' : ''}`} onClick={() => onOpen(project.id)} aria-label={`Read ${project.title}`}>
     <div className="project-visual"><ProjectArtwork index={index} /><span className="project-open" aria-hidden="true"><Plus size={22} weight="bold" /></span></div>
@@ -39,10 +48,10 @@ function ProjectCard({ index, onOpen }) {
   </button>;
 }
 // Source content uses paragraphs, emphasis and lists. Render text without executable HTML.
-function InlineText({ text }) {
+function InlineText({ text }: { text: string }) {
   return text.split(/(\*\*[^*]+\*\*)/g).map((piece, i) => piece.startsWith('**') ? <strong key={i}>{piece.slice(2, -2)}</strong> : piece);
 }
-function StoryContent({ content }) {
+function StoryContent({ content }: { content: string }) {
   return content.split(/\n\s*\n/).filter(Boolean).map((block, i) => {
     const lines = block.split('\n');
     if (lines.every(line => /^- /.test(line))) return <ul key={i}>{lines.map((line, j) => <li key={j}><InlineText text={line.slice(2)} /></li>)}</ul>;
@@ -50,12 +59,13 @@ function StoryContent({ content }) {
     return <p key={i}><InlineText text={block} /></p>;
   });
 }
-function CaseStudy({ id, onClose, onChange }) {
-  const dialogRef = useRef(null), scrollRef = useRef(null), headingRef = useRef(null), previousFocus = useRef(null);
+function CaseStudy({ id, onClose, onChange }: CaseStudyProps) {
+  const dialogRef = useRef<HTMLDialogElement>(null), scrollRef = useRef<HTMLElement>(null), headingRef = useRef<HTMLHeadingElement>(null), previousFocus = useRef<HTMLElement | null>(null);
   const index = projects.findIndex(p => p.id === id), project = projects[index];
   useEffect(() => {
     const dialog = dialogRef.current;
-    previousFocus.current = document.activeElement;
+    if (!dialog) return;
+    previousFocus.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     dialog.showModal();
     const scrollY = window.scrollY, previousOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
@@ -72,20 +82,20 @@ function CaseStudy({ id, onClose, onChange }) {
 }
 export function App() {
   const [activeSection, setActiveSection] = useState(''), [activeTab, setActiveTab] = useState(0), [paused, setPaused] = useState(false), [copied, setCopied] = useState(false);
-  const [theme, setTheme] = useState(() => { try { return localStorage.getItem('ellen-theme') === 'dark' ? 'dark' : 'light'; } catch { return 'light'; } });
+  const [theme, setTheme] = useState<Theme>(() => { try { return localStorage.getItem('ellen-theme') === 'dark' ? 'dark' : 'light'; } catch { return 'light'; } });
   const getProjectId = () => { const id = new URLSearchParams(window.location.search).get('project'); return projects.some(p => p.id === id) ? id : null; };
   const [projectId, setProjectId] = useState(getProjectId);
-  const copyTimeout = useRef(null);
+  const copyTimeout = useRef<number | undefined>(undefined);
   useEffect(() => { document.documentElement.dataset.theme = theme; try { localStorage.setItem('ellen-theme', theme); } catch { /* Preference storage is optional. */ } }, [theme]);
   useEffect(() => { const handlePop = () => setProjectId(getProjectId()); window.addEventListener('popstate', handlePop); return () => window.removeEventListener('popstate', handlePop); }, []);
-  useEffect(() => { document.title = projectId ? `${projects.find(p => p.id === projectId).folderTitle} — Ellen Wang` : 'Ellen Wang — Product Designer'; }, [projectId]);
+  useEffect(() => { const project = projects.find(p => p.id === projectId); document.title = project ? `${project.folderTitle} — Ellen Wang` : 'Ellen Wang — Product Designer'; }, [projectId]);
   useEffect(() => { const observer = new IntersectionObserver(entries => { entries.forEach(entry => { if (entry.isIntersecting) setActiveSection(entry.target.id); }); }, { rootMargin: '-20% 0px -50% 0px' }); document.querySelectorAll('main > section[id]').forEach(section => observer.observe(section)); return () => observer.disconnect(); }, []);
   useEffect(() => () => clearTimeout(copyTimeout.current), []);
-  function openProject(id) { const url = new URL(window.location.href); url.searchParams.set('project', id); window.history[projectId ? 'replaceState' : 'pushState']({}, '', url); setProjectId(id); }
+  function openProject(id: ProjectId) { const url = new URL(window.location.href); url.searchParams.set('project', id); window.history[projectId ? 'replaceState' : 'pushState']({}, '', url); setProjectId(id); }
   function closeProject() { const url = new URL(window.location.href); url.searchParams.delete('project'); window.history.pushState({}, '', url); setProjectId(null); }
-  async function copyEmail() { try { await navigator.clipboard.writeText(email); setCopied(true); clearTimeout(copyTimeout.current); copyTimeout.current = setTimeout(() => setCopied(false), 2500); } catch { window.location.href = `mailto:${email}`; } }
+  async function copyEmail() { try { await navigator.clipboard.writeText(email); setCopied(true); clearTimeout(copyTimeout.current); copyTimeout.current = window.setTimeout(() => setCopied(false), 2500); } catch { window.location.href = `mailto:${email}`; } }
   const currentExpertise = expertise[activeTab], ExpertiseIcon = currentExpertise.Icon;
-  const handleTabKey = event => { let index = activeTab; if (event.key === 'ArrowRight') index = (index + 1) % expertise.length; else if (event.key === 'ArrowLeft') index = (index + expertise.length - 1) % expertise.length; else if (event.key === 'Home') index = 0; else if (event.key === 'End') index = expertise.length - 1; else return; event.preventDefault(); setActiveTab(index); document.getElementById(`expertise-tab-${index}`)?.focus(); };
+  const handleTabKey = (event: KeyboardEvent<HTMLDivElement>) => { let index = activeTab; if (event.key === 'ArrowRight') index = (index + 1) % expertise.length; else if (event.key === 'ArrowLeft') index = (index + expertise.length - 1) % expertise.length; else if (event.key === 'Home') index = 0; else if (event.key === 'End') index = expertise.length - 1; else return; event.preventDefault(); setActiveTab(index); document.getElementById(`expertise-tab-${index}`)?.focus(); };
   return <>
     <a className="skip-link" href="#main">Skip to content</a>
     <header className="site-header"><a className="brand" href="#home" aria-label="Ellen Wang, home"><img src={assetUrl('/assets/logo_in_circle.svg')} alt="" width="32" height="32" /><span>Ellen Wang<span className="brand-period">.</span></span></a><div className="header-right"><span className="location"><MapPin size={16} weight="fill" /> Gold Coast, AU</span><button className="icon-button theme-toggle" aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`} onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>{theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}</button></div></header>
