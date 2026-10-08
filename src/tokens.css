@@ -7,6 +7,8 @@
   --font-body: 'IBM Plex Sans', Arial, sans-serif;
   --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
   --page: #ffffff; --card: #ffffff; --ink: #000000; --muted: #666666;
+  --expertise-surface: #f5f6f7;
+  --expertise-menu: #e0e1e3;
   --border: #d6d6d6; --hover: #e0e1e3; --action: #000000;
   --on-action: #ffffff; --action-hover: #292929;
   --accent-cyan: #51d6ed; --accent-lime: #b3ed67; --accent-yellow: #ffdb57;
@@ -15,6 +17,8 @@
 [data-theme='dark'] {
   color-scheme: dark;
   --page: #111111; --card: #292929; --ink: #ffffff; --muted: #d6d6d6;
+  --expertise-surface: #292929;
+  --expertise-menu: #3a3b3d;
   --border: #666666; --hover: #3a3b3d; --action: #ffffff;
   --on-action: #000000; --action-hover: #eeeeee;
 }
