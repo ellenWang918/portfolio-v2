@@ -49,6 +49,8 @@ The production build and included hosting-worker tests pass. Browser checks cove
 
 This is a static frontend. Email actions open the visitor's email client. A custom backend is not required.
 
+For Vercel, `vercel.json` explicitly selects Vite, runs `npm run build`, and publishes `dist/client`. This overrides an existing Next.js framework preset on the connected project.
+
 The GitHub Pages workflow builds and publishes the site after each push to `main`. It sets `GITHUB_PAGES=true` to use the repository's `/portfolio-v2/` base path. Local previews and other hosting targets use `/` by default.
 
 The existing Sites-compatible worker and build adapter are preserved. `npm run build` creates `dist/client`, `dist/server`, and `dist/.openai/hosting.json`. Run `npm run test:sites` before a Sites handoff. For a conventional static host, publish `dist/client` with a single-page fallback to `index.html`.
