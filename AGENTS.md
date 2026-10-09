@@ -8,6 +8,10 @@ Make the hero background span the full page width at every screen size. Keep the
 Use IBM Plex Sans at 14px and medium weight (500) for the Home introduction label, "HI, I’M ELLEN WANG", preserving its letter spacing. Keep a compact 6px gap between the emoji and text, and align them along the bottom.
 
 Do not show the gallery's bottom caption ("A FEW THINGS I’VE HELPED MAKE CLEARER") or its Pause/Play control row. Keep the preview cards and their individual captions, with automatic motion pausing on hover or keyboard focus.
+Use light, diffuse shadows around the carousel preview artwork, with restrained shadows in the dark theme. Keep the shadows visible beyond the gallery's vertical edges.
+Give the Customer Analysis carousel artwork (`artwork-4`) an especially soft, blended shadow with a wide blur and no tight contact-shadow layer.
+Show only the project name in each carousel caption, without a plus icon.
+On carousel-card hover or keyboard focus, gently enlarge the active card and subtly blur and fade the other cards' artwork while keeping captions sharp. Restore the cards on exit, and omit enlargement for reduced motion and touch-only hover.
 
 Precede the Home introduction with a 👋 emoji instead of a line. On hover, enlarge the emoji slightly and wave once per pointer entry; respect reduced-motion preferences.
 
@@ -20,6 +24,8 @@ Show "Available for work" in the top-right header instead of location details, p
 Preserve the logo and availability row's original top padding: 28px on desktop and tablet, and 20px on mobile. Requests for Home header section spacing refer to the introduction, not the logo row.
 Keep the increased Home introduction spacing: use 316px of hero top padding on desktop, 396px on wide desktop, 256px on tablet, and 258px on mobile.
 Use "I turn ambiguity into clarity." as the Home hero headline.
+Apply a very light static blur (`.018em`) to the word "ambiguity" in the Home headline, scaled with its font size so it remains legible on desktop and mobile.
+Reveal the Home headline on page load with a gentle fade and upward motion, playing once. Show it immediately when reduced motion is preferred, and preserve the light blur on "ambiguity".
 Omit the Work section's introductory sentence, "From research and service blueprints to products and systems that scale."
 Use a loose hand-drawn tangle with a trailing loop, inspired by the supplied scribble reference, in place of the eye in the Home hero. Preserve the cyan pill background and render the scribble in black in both themes. Keep the Expertise eye accent.
 
@@ -37,10 +43,12 @@ Omit the case-study sidebar tagline, "Complex products. Clear experiences."
 Leave no horizontal grid gap between the case-study project sidebar and the article; the article starts immediately beside the sidebar divider on desktop and tablet.
 Keep the case-study toolbar's bottom padding compact: 12px on desktop and tablet, and 10px on mobile.
 Show a fixed circular Back to top button in the bottom-right corner of every case-study page, 32px from the edges on desktop and 16px on mobile, with safe-area spacing. Use the existing action colours and an upward caret. Scroll smoothly to the page top and respect reduced-motion preferences. Keep 112px of page-bottom padding on desktop and 96px on mobile so the fixed button leaves footer navigation clear.
+Show a thin reading-progress bar fixed at the top of every case-study page, aligned with the centred case-study container's inner edges and side gutters. Fill it as the article scrolls, reaching 100% when the article's end is visible. Support desktop, mobile, both themes, and reduced motion.
 
 Use IBM Plex Sans for tag/chip labels, with compact padding of 2px vertically and 10px horizontally.
 
-Order the pill menu and page sections as Home, Expertise, Work, About, Contact. Keep the project preview gallery with the Home introduction, and number Expertise before Work.
+Order the pill menu and page sections as Home, Expertise, Work, About, Contact. Keep the project preview gallery with the Home introduction.
+Start the Expertise, Work, About, and Contact sections with their main headings; omit numbered section labels such as "01 / HOW I WORK" and their extra spacing.
 
 Keep spacing between section content blocks 40% tighter than the original, except for the enlarged gap above the carousel. Desktop gaps: Hero to gallery 75.2px (84.8px on wide desktop and 65.6px on tablet), gallery to Expertise card 88.8px, Expertise to Work 76.8px, Work to About 88.8px, About to Contact 76.8px, Contact to footer 28.8px. Mobile gaps: 52.8px, 57.6px, 43.2px, 43.2px, 43.2px, and 28.8px respectively. Preserve internal component spacing and bottom navigation clearance.
 
