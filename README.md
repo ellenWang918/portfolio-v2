@@ -33,7 +33,7 @@ npm run preview
 
 `npm run typecheck` checks the app and `vite.config.ts` with strict TypeScript settings. The production build runs this check before bundling. The Sites worker, build adapter, and hosting tests remain JavaScript for hosting compatibility.
 
-Example case-study URL: `/?project=design-system-palms`.
+Example case-study URL: `/work/design-system-palms`.
 
 ## Sources and adaptation
 
@@ -52,7 +52,7 @@ The production build and included hosting-worker tests pass. Browser checks cove
 
 This is a static frontend. Email actions open the visitor's email client. A custom backend is not required.
 
-For Vercel, `vercel.json` explicitly selects Vite, runs `npm run build`, and publishes `dist/client`. This overrides an existing Next.js framework preset on the connected project.
+For Vercel, `vercel.json` explicitly selects Vite, runs `npm run build`, and publishes `dist/client`. This overrides an existing Next.js framework preset on the connected project. Requests to `/work/*` serve `index.html`, allowing case-study links, direct visits and refreshes to load the correct page.
 
 The GitHub Pages workflow builds and publishes the site after each push to `main`. It sets `GITHUB_PAGES=true` to use the repository's `/portfolio-v2/` base path. Local previews and other hosting targets use `/` by default.
 
