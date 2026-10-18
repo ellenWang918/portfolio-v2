@@ -1,13 +1,13 @@
 [
   {
     "id": "design-system-palms",
-    "title": "Design System & Governance",
+    "title": "PLAMS Design System",
     "folderTitle": "Design System",
     "folderArtwork": {
       "src": "/assets/design-system-drawing.svg",
       "alt": "Design System drawing"
     },
-    "summary": "An enterprise travel platform serving more than 6,000 monthly active users.",
+    "summary": "Auditing and maintaining the design system and workflow for an enterprise travel platform.",
     "hero": {
       "src": "/assets/design-system-editorial.svg",
       "alt": "Design System project hero"
@@ -34,7 +34,7 @@
     "story": [
       {
         "header": "Overview",
-        "content": "The platform had been in development for two years and served more than 6,000 monthly active users. Its first interface prioritised speed to market, a later redesign introduced a more considered brand-aligned visual and interaction language.\n\nBoth generations remained live across different pages. Three designers were contributing without a single source of truth, while completed front-end work could reach stakeholders without formal design review."
+        "content": "The platform had been in development for two years and served more than 6,000 monthly active users. Its first interface prioritised speed to market, a later redesign introduced a more considered brand aligned visual and interaction language.\n\nBoth generations remained live across different pages. Three designers were contributing without a single source of truth, while completed front-end work could reach stakeholders without formal design review."
       },
       {
         "header": "The challenge",
