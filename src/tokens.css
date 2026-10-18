@@ -5,7 +5,7 @@
   color-scheme: light;
   --font-display: 'Space Grotesk', Arial, sans-serif;
   --font-body: 'IBM Plex Sans', Arial, sans-serif;
-  --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
+  --font-mono: var(--font-body);
   --page: #ffffff; --card: #ffffff; --ink: #000000; --muted: #666666;
   --expertise-surface: #f5f6f7;
   --expertise-menu: #e0e1e3;

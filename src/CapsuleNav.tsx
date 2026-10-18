@@ -2,9 +2,8 @@ import { useLiquidPill } from './useLiquidPill';
 
 const items = [
   ['home', 'Home'],
-  ['expertise', 'Expertise'],
-  ['work', 'Work'],
   ['about', 'About'],
+  ['work', 'Work'],
   ['contact', 'Contact'],
 ] as const;
 

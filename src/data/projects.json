@@ -1,21 +1,21 @@
 [
   {
     "id": "design-system-palms",
-    "title": "PLAMS Design System",
+    "title": "PALMS Design System",
     "folderTitle": "Design System",
     "folderArtwork": {
       "src": "/assets/design-system-drawing.svg",
       "alt": "Design System drawing"
     },
-    "summary": "Auditing and maintaining the design system and workflow for an enterprise travel platform.",
+    "summary": "Auditing and maintaining the design system and workflow for an enterprise travel platform to reduce misalignment and establish design governance.",
     "hero": {
       "src": "/assets/design-system-editorial.svg",
       "alt": "Design System project hero"
     },
     "tags": [
       "Design System",
-      "Governance",
-      "Design Review"
+      "Design Governance",
+      "Web"
     ],
     "metadata": [
       {
@@ -33,20 +33,16 @@
     ],
     "story": [
       {
-        "header": "Overview",
-        "content": "The platform had been in development for two years and served more than 6,000 monthly active users. Its first interface prioritised speed to market, a later redesign introduced a more considered brand aligned visual and interaction language.\n\nBoth generations remained live across different pages. Three designers were contributing without a single source of truth, while completed front-end work could reach stakeholders without formal design review."
+        "header": "Executive Summary",
+        "content": "PALMS is an enterprise travel platform where inconsistent interfaces and gaps between design and implementation were affecting delivery.\n\nMy initial brief was to build a design system. Through research, I identified a broader need for design governance. I introduced shared component standards, documentation and a page library, and worked with the scrum master to make design reviews part of the delivery process.\n\nAll designers adopted the updated library. No further misalignments between design and implementation were reported during the observed delivery period."
       },
       {
-        "header": "The challenge",
-        "content": "After talking with the stakeholders and team members, the problem seems extended beyond visual inconsistency:\n\n- The live product, design system and working files did not always match.\n- Previous designers sometimes created local components without checking the shared library.\n- Page designs were distributed across files and difficult to locate.\n- Business analysts, engineers and testers needed an always available reference when a designer could not be reached.\n- A product wide audit found more than 25 components, with approximately seven requiring correction or restructuring. Search was a representative example: 3 different patterns existed across the product, with inconsistent icons and helper text behaviour."
-      },
-      {
-        "header": "The problem statement",
-        "content": "How might we create a consistent, reliable design system and workflow that keeps design, development, and documentation aligned across the product?"
+        "header": "Background",
+        "content": "As the business grew, the legacy travel request ticketing system struggled to keep pace with demand. PALMS was introduced to streamline workflows and automate manual tasks, helping back office staff manage the increasing workload. When I joined, the platform had been live for six months and served more than 6,000 monthly active users.\n\nThe initial interface prioritised speed to market. A later redesign introduced a more considered visual and interaction language aligned with the brand, but both versions remained live across different pages. Three designers were contributing without a single source of truth, leading to inconsistencies between design files and the live product. My initial brief was to build a design system to bring greater consistency to the platform.\n\nBefore building the design system, I spoke with stakeholders and team members to understand the wider context. These conversations revealed that the problems extended beyond visual inconsistency.\n\nThis led to The Problem Statement:\n\n**How might we help teams keep design and implementation aligned as PALMS grows, so users experience consistent visuals and interactions across the platform?**"
       },
       {
         "header": "My approach",
-        "content": "I treated the issue as a connected system of components, people and delivery practices.\n\n1. **Audit the ecosystem** - Compared the live product, existing design system and designers' working files to identify component, typography, interaction and implementation mismatches.\n2. **Create one shared structure** - Defined the design-system architecture and rules for contribution, including checking the library before creating a component and communicating every shared update.\n3. **Rebuild for reuse** - Applied atomic-design principles to restructure components and replace duplicated variants with manageable properties.\n4. **Document decisions** - Created practical guidance informed by mature public design systems, including behaviour, content and accessibility.\n5. **Improve findability** - Built a guided page library containing the current approved designs.\n6. **Close the delivery loop** - Worked with the scrum master to add design review to every front-end user story. Any user faced screen could not be completed until the designer had reviewed and approved it."
+        "content": "To ensure a thorough approach, I created a detailed plan and reviewed it with stakeholders. This helped clarify why the work was broader than initially expected and secure their approval for the expanded scope. The plan covered the following:\n\n1. **Audit Figma files** Reviewed more than 50 files in the project’s Figma folder, archived those no longer in use, and created an index documenting each active file and the features it contained.\n2. **Compare the product and component library** Documented inconsistencies between the live product and the library, identifying unused components and those missing from the shared library.\n3. **Rebuild for reuse** Applied atomic design principles to restructure components, replace duplicated variants with manageable properties, and address accessibility requirements.\n4. **Document decisions** Created guidance informed by mature public design systems, covering patterns, content and accessibility.\n5. **Improve findability** Built a page template library containing the latest approved designs to help designers create prototypes faster.\n6. **Agree on a shared design workflow** Worked with other designers to establish shared practices, including checking the library before creating components and communicating updates to shared resources.\n7. **Close the delivery loop** Worked with the scrum master to include design reviews in every front end user story. Stories affecting the interface required a designer’s review and approval before completion."
       },
       {
         "header": "Outcome",
@@ -57,7 +53,16 @@
         "content": "**Don’t panic when the iceberg is bigger than expected**\n\nAt first, the task seemed straightforward: use an existing design system as a reference and build one for our product. But research revealed that several pain points were connected, and the real problem extended beyond the design system itself. The solution needed to address the wider issues behind it. As the scope grew, I shared the findings and proposed actions with stakeholders. They understood the broader challenge and supported the plan. The work ultimately required 40% more effort than expected, but it led to a more complete and effective outcome.\n\n**Do what you believe is right, and trust your team**\n\nThe gap between design and the live product wasn’t unique to our product at Rio Tinto, but we were the first team to address it by embedding design reviews into the development process. Turning that idea into practice took sustained effort from our Scrum Master and Business Analyst, along with the understanding and commitment of stakeholders and the wider team."
       }
     ],
-    "confidential": true
+    "confidential": true,
+    "approachResults": [
+      "Reduced the number of active Figma files to 25 and created a Confluence index documenting the contents of each file.",
+      "Identified three inconsistent interface elements and added user stories to the backlog to address them. Removed four unused components from component library.",
+      "Consolidated four button components into one reusable component and standardised input styles. Reviewed all components against the agreed patterns, rules and accessibility requirements.",
+      "Created documentation for components and product patterns, giving everyone on the team access to shared guidance at any time.",
+      "Created a page template library with current layouts and reusable starting points to help designers build prototypes faster.",
+      "Facilitated a meeting to align designers on a shared workflow and agree on weekly alignment sessions.",
+      "Made designer approval a requirement for interface related user stories, embedding design review into the quality assurance process."
+    ]
   },
   {
     "id": "feature-improvement-sps",
@@ -227,62 +232,6 @@
       {
         "header": "Reflection",
         "content": "Working with a senior designer did not mean duplicating the same responsibilities. My contribution was strongest where rapid structuring and execution were needed: proposing the alignment method, owning the short-term experience and turning a draft flow into a coherent prototype that could be tested and handed over."
-      }
-    ],
-    "confidential": true
-  },
-  {
-    "id": "customer-data-analysis-commercial",
-    "title": "Customer Data Analysis & Feasibility",
-    "folderTitle": "Customer Analysis",
-    "folderArtwork": {
-      "src": "/assets/customer-data-analysis-drawing.svg",
-      "alt": "Customer Analysis drawing"
-    },
-    "summary": "A six week feasibility study exploring customer patterns through data analysis.",
-    "hero": {
-      "src": "/assets/customer-data-analysis-editorial.svg",
-      "alt": "Customer Data Analysis project hero"
-    },
-    "tags": [
-      "Customer Analysis",
-      "Customer Segmentation",
-      "Cross-timezone Collaboration"
-    ],
-    "metadata": [
-      {
-        "label": "Company",
-        "value": "Rio Tinto"
-      },
-      {
-        "label": "Role",
-        "value": "Digital graduate product designer"
-      },
-      {
-        "label": "Year",
-        "value": "Oct 2024 - Feb 2025"
-      }
-    ],
-    "story": [
-      {
-        "header": "Overview",
-        "content": "Rio Tinto’s commercial team in the US was receiving recurring customer feedback about several parts of the service experience. To understand whether EDI (Electronic Data Interchange) could address those needs, I analysed available customer data to identify behavioural patterns and assess where digital integration might support stronger customer relationships.\n\n**The objective:** Collate and organise internal customer research and map findings to segmentation via a matrix. Collate data in a spreadsheet ready to query and expose gaps to address. Remedying the gaps in research will require a research plan moving forward. This research plan should be scalable to other product groups and geographic locations to get a holistic understanding of customers’ needs.\n\n**The challenge:** The commercial team had identified customer pain points, but the available information was spread across account and product data. We needed a more structured way to understand how customers differed and where the business could focus its attention.\n\n**My role:** I organised and analysed the customer data, explored potential customer segments, and prepared a playback to help stakeholders understand the patterns and opportunities. I also considered what additional information would strengthen the customer picture."
-      },
-      {
-        "header": "My approach",
-        "content": "I structured the available customer data and compared patterns across customer types, products, commercial performance, and internal assessments. I then developed three working segments to make differences across the customer base easier to explore."
-      },
-      {
-        "header": "Findings",
-        "content": "The analysis revealed meaningful variation across customer groups. Some groups represented a greater share of activity, while others showed different patterns in the internal assessments. These findings gave stakeholders a clearer framework for discussing customer priorities and where more tailored engagement could be explored.\n\nThe segments were based on the data available for the study, so I presented them as working groups to guide discussion—not as validated customer personas."
-      },
-      {
-        "header": "Outcome",
-        "content": "I turned a broad customer dataset into a structured view that stakeholders could use to discuss customer groups and commercial opportunities. The work also surfaced where the picture was incomplete, including gaps in geographic, behavioural, and direct customer feedback data.\n\nThat distinction helped frame the analysis responsibly: it could guide prioritisation using the information available, while highlighting where further customer research would be needed to validate needs and strengthen the segments."
-      },
-      {
-        "header": "What I learned",
-        "content": ""
       }
     ],
     "confidential": true

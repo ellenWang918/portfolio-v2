@@ -1,0 +1,64 @@
+{
+  "project": {
+    "id": "customer-data-analysis-commercial",
+    "title": "Customer Data Analysis & Feasibility",
+    "folderTitle": "Customer Analysis",
+    "folderArtwork": {
+      "src": "/assets/customer-data-analysis-drawing.svg",
+      "alt": "Customer Analysis drawing"
+    },
+    "summary": "A six week feasibility study exploring customer patterns through data analysis.",
+    "hero": {
+      "src": "/assets/customer-data-analysis-editorial.svg",
+      "alt": "Customer Data Analysis project hero"
+    },
+    "tags": [
+      "Customer Analysis",
+      "Customer Segmentation",
+      "Cross-timezone Collaboration"
+    ],
+    "metadata": [
+      {
+        "label": "Company",
+        "value": "Rio Tinto"
+      },
+      {
+        "label": "Role",
+        "value": "Digital graduate product designer"
+      },
+      {
+        "label": "Year",
+        "value": "Oct 2024 - Feb 2025"
+      }
+    ],
+    "story": [
+      {
+        "header": "Overview",
+        "content": "Rio Tinto’s commercial team in the US was receiving recurring customer feedback about several parts of the service experience. To understand whether EDI (Electronic Data Interchange) could address those needs, I analysed available customer data to identify behavioural patterns and assess where digital integration might support stronger customer relationships.\n\n**The objective:** Collate and organise internal customer research and map findings to segmentation via a matrix. Collate data in a spreadsheet ready to query and expose gaps to address. Remedying the gaps in research will require a research plan moving forward. This research plan should be scalable to other product groups and geographic locations to get a holistic understanding of customers’ needs.\n\n**The challenge:** The commercial team had identified customer pain points, but the available information was spread across account and product data. We needed a more structured way to understand how customers differed and where the business could focus its attention.\n\n**My role:** I organised and analysed the customer data, explored potential customer segments, and prepared a playback to help stakeholders understand the patterns and opportunities. I also considered what additional information would strengthen the customer picture."
+      },
+      {
+        "header": "My approach",
+        "content": "I structured the available customer data and compared patterns across customer types, products, commercial performance, and internal assessments. I then developed three working segments to make differences across the customer base easier to explore."
+      },
+      {
+        "header": "Findings",
+        "content": "The analysis revealed meaningful variation across customer groups. Some groups represented a greater share of activity, while others showed different patterns in the internal assessments. These findings gave stakeholders a clearer framework for discussing customer priorities and where more tailored engagement could be explored.\n\nThe segments were based on the data available for the study, so I presented them as working groups to guide discussion—not as validated customer personas."
+      },
+      {
+        "header": "Outcome",
+        "content": "I turned a broad customer dataset into a structured view that stakeholders could use to discuss customer groups and commercial opportunities. The work also surfaced where the picture was incomplete, including gaps in geographic, behavioural, and direct customer feedback data.\n\nThat distinction helped frame the analysis responsibly: it could guide prioritisation using the information available, while highlighting where further customer research would be needed to validate needs and strengthen the segments."
+      },
+      {
+        "header": "What I learned",
+        "content": ""
+      }
+    ],
+    "confidential": true
+  },
+  "outcome": {
+    "value": "3",
+    "label": "working customer segments",
+    "short": "Making the customer picture clearer.",
+    "category": "Customer research"
+  }
+}

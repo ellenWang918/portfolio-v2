@@ -21,7 +21,7 @@ export function ExpertiseTabs({ items, activeTab, onChange }: ExpertiseTabsProps
     pill.containerRef.current?.querySelector<HTMLButtonElement>(`#expertise-tab-${index}`)?.focus();
   };
 
-  return <div ref={pill.containerRef} className="tab-list" role="tablist" aria-label="Design expertise"
+  return <div ref={pill.containerRef} className="tab-list" role="tablist" aria-label="About Ellen"
     onKeyDown={handleKeyDown} onPointerLeave={pill.onPointerLeave}>
     <span ref={pill.pillRef} className="tab-pill" aria-hidden="true" />
     {items.map((item, index) => <button key={item.name} id={`expertise-tab-${index}`}
