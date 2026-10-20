@@ -42,6 +42,9 @@ Use the first full-page case-study layout, as confirmed by the user: "ELLEN WANG
 Omit the case-study sidebar tagline, "Complex products. Clear experiences."
 Leave no horizontal grid gap between the case-study project sidebar and the article; the article starts immediately beside the sidebar divider on desktop and tablet.
 Keep the case-study toolbar's bottom padding compact: 12px on desktop and tablet, and 10px on mobile.
+Use these exact bottom case-study navigation labels: first case study, Back to home and Next case study; middle case studies, Previous case study and Next case study; last case study, Previous case study and Back to home. Link previous and next to adjacent published projects in order, without wrapping from last to first, and link Back to home to the Home anchor.
+Place a 16px left chevron before Previous case study, matching the right chevron after Next case study. Keep decorative chevrons hidden from assistive technology.
+Keep footer chevrons vertically centred with their labels, using matching label spans and non-shrinking 16px icons. Preserve the original outlined previous button, filled next button, natural desktop widths, typography, padding, and mobile layout.
 Show a fixed circular Back to top button in the bottom-right corner of every case-study page, 32px from the edges on desktop and 16px on mobile, with safe-area spacing. Use the existing action colours and an upward caret. Scroll smoothly to the page top and respect reduced-motion preferences. Keep 112px of page-bottom padding on desktop and 96px on mobile so the fixed button leaves footer navigation clear.
 Show a thin reading-progress bar fixed at the top of every case-study page, aligned with the centred case-study container's inner edges and side gutters. Fill it as the article scrolls, reaching 100% when the article's end is visible. Support desktop, mobile, both themes, and reduced motion.
 
@@ -150,18 +153,36 @@ Use #f0f3f5 for PALMS approach card fronts and #e3f4f7 for result backs in the l
 
 Use plain PALMS flip cards without notebook ruling, punched holes, folded corners or paper shadows. Preserve grey fronts, pale cyan backs and 24px Space Grotesk numbers.
 
-Keep a Background section immediately after Overview in the Feature Improvement & MVP Validation case study. Use the approved three-paragraph narrative covering Solver within Rio Tinto’s Safe Production System, the fragmented Kaizen workflow, and introducing Kaizen into Solver with accountability and flexibility.
+Start Feature Improvement & MVP Validation with Executive summary, using the approved three-paragraph summary covering the fragmented Kaizen process, the Kanban MVP contribution, and usability findings with the post-launch evidence limitation. Keep Background immediately after Executive summary, using the approved three-paragraph narrative covering Solver within Rio Tinto’s Safe Production System, the fragmented Kaizen workflow, and introducing Kaizen into Solver with accountability and flexibility.
 
 Use the supplied Solver Kaizen list wireframe (public/assets/solver-kaizen-wireframe.png) below all Feature Improvement Background text at every screen size, spanning the article width. Preserve the full image and its intrinsic aspect ratio.
 
 Keep the Feature Improvement Background text-to-image spacing at one quarter of its original size: 7px grid gap on desktop and 5px at 1055px and below, plus a 4px final paragraph bottom margin.
 
-Follow Feature Improvement Background with My approach: show five steps as a vertical timeline on the left and the approved four narrative paragraphs on the right, aligned at the top. Stack the steps above the narrative at 1055px and below. Match the supplied timeline reference with connected dots, bold titles, and descriptions below. Use unhyphenated wording such as follow up, task based, and action tracking in this section. Preserve the content, order, responsive layout, and theme-aware colours.
+Follow Feature Improvement Background with Approach: show the five steps as a standalone vertical timeline, followed by the approved four narrative paragraphs and then the research plan image, stacked in that order at every screen size. Match the supplied timeline reference with connected dots, bold titles, and descriptions below. Use unhyphenated wording such as follow up, task based, and action tracking in this section. Preserve the content, order, responsive layout, and theme-aware colours.
 
-Show the supplied Kaizen research plan image (public/assets/solver-kaizen-research-plan.png) below the My approach steps and narrative, spanning the full article width with its original proportions and blurred details preserved.
+Keep the detailed Approach opening paragraph beginning “The design process began with stakeholder and user interviews” intact. Focus the workshop paragraph on prioritising findings and aligning on accountability, knowledge sharing, flexibility, and light administration; retain the journey mapping, MVP, and testing details in the following paragraphs.
 
-Place a Solution section immediately after My approach in the Feature Improvement case study.
+Show the supplied Kaizen research plan image (public/assets/solver-kaizen-research-plan.png) below the Approach narrative at full article width on all screen sizes. Preserve its original proportions and blurred details.
+
+Place a Solution section immediately after Approach in the Feature Improvement case study.
 
 Give “digital charter” in Solution a brand lime dotted underline and a tooltip card containing the approved charter explanation and its five parts. Support hover, keyboard focus, Escape dismissal and tap, with a theme-aware card constrained to the viewport.
 
-Show public/assets/kaizen-task-click-demo-v1.mp4 below the text in Feature Improvement’s My contribution to the action workflow section. Use a responsive full-width video with muted autoplay, automatic looping, and inline mobile playback. Replace native controls with two 32px grey circular buttons at the bottom right: Pause/Play with a 16px icon and Replay with an 18px icon. Reveal controls on video hover and hide them when the pointer leaves, including after a mouse click; keyboard focus-visible may reveal them for accessibility. Preserve reduced-motion support for transitions.
+Use My contribution as the heading of section 5 in Feature Improvement. Show public/assets/kaizen-task-click-demo-v1.mp4 below its text. Use a responsive full-width video with muted autoplay, automatic looping, and inline mobile playback. Replace native controls with two 32px grey circular buttons at the bottom right: Pause/Play with a 16px icon and Replay with an 18px icon. Reveal controls on video hover and hide them when the pointer leaves, including after a mouse click; keyboard focus-visible may reveal them for accessibility. Preserve reduced-motion support for transitions.
+
+Omit the Secondary initiative - Print and export section from Feature Improvement, including its mention in Executive summary.
+
+Start Feature Improvement’s My contribution text with “During interviews, I noticed participants using spreadsheet columns as an informal Kanban board”; omit the preceding interview preparation sentence.
+
+Include the positive stakeholder response, their understanding of potential additional development effort, and users completing new action board tasks without difficulty in Feature Improvement’s My contribution narrative.
+
+Place Result immediately after My contribution in Feature Improvement, using the supplied two paragraphs covering four usability sessions and the senior designer’s report of a successful launch, while retaining the limitation on assessing post-launch impact directly. Omit The conflict section and its Making the case for a smaller scope narrative.
+
+Place What I learned after Result in Feature Improvement, using the supplied reflection on empathy, observation, examining assumptions from Notion, and balancing user value with delivery effort.
+
+Use “Designing and validating a Kanban workflow for Rio Tinto’s continuous improvement platform.” as the Feature Improvement project description.
+
+Use Solver Action Management as the title for the former Feature Improvement case study, including the page heading, Work card, carousel caption, and browser title. Use only Solver in desktop and compact case-study project navigation, including the compact navigation summary. Keep its existing feature-improvement-sps route.
+
+Show the supplied five-stage Kaizen workflow image (public/assets/solver-kaizen-solution-workflow.png) immediately below the Feature Improvement Solution text, spanning the article width with its intrinsic aspect ratio preserved.

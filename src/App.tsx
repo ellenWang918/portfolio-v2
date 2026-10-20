@@ -2,7 +2,7 @@ import { Fragment, useEffect, useId, useLayoutEffect, useRef, useState } from 'r
 import { createPortal } from 'react-dom';
 
 import type { Icon as PhosphorIcon } from '@phosphor-icons/react';
-import { Eye, Stack, Sparkle, MapPin, Sun, Moon, EnvelopeSimple, LinkedinLogo, GithubLogo, Compass, GridFour, Check, Copy, CaretRight, CaretUp, ArrowRight, ArrowLeft, Pause, Play, ArrowCounterClockwise } from '@phosphor-icons/react';
+import { Eye, Stack, Sparkle, MapPin, Sun, Moon, EnvelopeSimple, LinkedinLogo, GithubLogo, Compass, GridFour, Check, Copy, CaretLeft, CaretRight, CaretUp, ArrowRight, ArrowLeft, Pause, Play, ArrowCounterClockwise } from '@phosphor-icons/react';
 import projects from './data/projects.json';
 import { CapsuleNav } from './CapsuleNav';
 import { ExpertiseTabs } from './ExpertiseTabs';
@@ -191,17 +191,18 @@ function KaizenVideo() {
     </div>
   </div>;
 }
-function ApproachTimeline({ content }: { content: string }) {
+function SolverApproach({ content }: { content: string }) {
   const blocks = content.split(/\n\s*\n/).filter(Boolean);
   const steps = blocks.filter(block => block.startsWith('**'));
   const introduction = blocks.filter(block => !block.startsWith('**')).join('\n\n');
-  return <div className="approach-layout"><ol className="approach-timeline" role="list">{steps.map((step, i) => {
+  return <div className="solver-approach"><ol className="approach-timeline" role="list">{steps.map((step, i) => {
     const [title, ...description] = step.split('\n');
     return <li key={i}><strong>{title.replace(/^\*\*|\*\*$/g, '')}</strong><p>{description.join(' ')}</p></li>;
-  })}</ol><div className="approach-narrative"><StoryContent content={introduction} /></div></div>;
+  })}</ol><div className="approach-layout"><div className="approach-narrative"><StoryContent content={introduction} /></div><img className="story-image solver-research-plan" src={assetUrl('/assets/solver-kaizen-research-plan.png')} alt="Kaizen concept research plan showing objectives, methodology, participants and questions across preparation, event and follow up phases, with sensitive details blurred." width={1727} height={911} loading="lazy" /></div></div>;
 }
 function StoryContent({ content, showPalmsComparison = false }: { content: string; showPalmsComparison?: boolean }) {
   return content.split(/\n\s*\n/).filter(Boolean).map((block, i) => {
+    if (block.startsWith('### ')) return <h3 className="story-subheading" key={i}><InlineText text={block.slice(4)} /></h3>;
     if (block.startsWith('**How might we help teams keep design and implementation aligned as PALMS grows,')) return <blockquote className="palms-problem-quote" key={i}><p>{block.slice(2, -2)}</p></blockquote>;
     const lines = block.split('\n');
     if (lines.every(line => /^- /.test(line))) return <ul key={i}>{lines.map((line, j) => <li key={j}><InlineText text={line.slice(2)} /></li>)}</ul>;
@@ -212,6 +213,7 @@ function StoryContent({ content, showPalmsComparison = false }: { content: strin
 function CaseStudy({ id }: { id: ProjectId }) {
   const articleRef = useRef<HTMLElement>(null);
   const index = projects.findIndex(p => p.id === id), project = projects[index];
+  const previousProject = projects[index - 1], nextProject = projects[index + 1];
   const sections = project.story.filter(section => section.content || section.header === 'Solution');
   return <main id="main" className="case-page">
     <ReadingProgress key={id} articleRef={articleRef} />
@@ -219,16 +221,16 @@ function CaseStudy({ id }: { id: ProjectId }) {
     <div className="case-toolbar"><span className="mono">ELLEN WANG / SELECTED WORK / 0{index + 1}</span><a className="text-button case-back" href={`${import.meta.env.BASE_URL}#home`}><ArrowLeft size={16} aria-hidden="true" /><span className="text-button-label">Back to Home</span></a></div>
     <div className="case-body">
       <details className="case-project-picker" key={id}>
-        <summary>Projects <span>{project.folderTitle}</span></summary>
+        <summary>Projects <span>{project.id === 'feature-improvement-sps' ? 'Solver' : project.folderTitle}</span></summary>
         <nav aria-label="Case studies">
-          {projects.map((p, i) => <a href={projectUrl(p.id)} aria-current={p.id === id ? 'page' : undefined} key={p.id}><span className="mono">0{i + 1}</span>{p.id === 'design-system-palms' ? 'PALMS Design System' : p.folderTitle}</a>)}
+          {projects.map((p, i) => <a href={projectUrl(p.id)} aria-current={p.id === id ? 'page' : undefined} key={p.id}><span className="mono">0{i + 1}</span>{p.id === 'design-system-palms' ? 'PALMS Design System' : p.id === 'feature-improvement-sps' ? 'Solver' : p.folderTitle}</a>)}
         </nav>
       </details>
       <aside className="case-sidebar" aria-label="Case studies">
         <div className="case-sidebar-content">
           <div className="case-project-list">
             <p className="mono">CASE STUDIES</p>
-            {projects.map((p, i) => <a className={p.id === id ? 'selected' : ''} href={projectUrl(p.id)} aria-current={p.id === id ? 'page' : undefined} key={p.id}><span className="mono">0{i + 1}</span>{p.id === 'design-system-palms' ? 'PALMS Design System' : p.folderTitle}</a>)}
+            {projects.map((p, i) => <a className={p.id === id ? 'selected' : ''} href={projectUrl(p.id)} aria-current={p.id === id ? 'page' : undefined} key={p.id}><span className="mono">0{i + 1}</span>{p.id === 'design-system-palms' ? 'PALMS Design System' : p.id === 'feature-improvement-sps' ? 'Solver' : p.folderTitle}</a>)}
           </div>
         </div>
       </aside>
@@ -240,12 +242,17 @@ function CaseStudy({ id }: { id: ProjectId }) {
       {id === 'design-system-palms' && section.header === 'Background' ? <><StoryContent content={section.content.split('\n\n').slice(0, 2).join('\n\n')} showPalmsComparison /><div className="palms-background-insight"><div><StoryContent content={section.content.split('\n\n').slice(2).join('\n\n')} /></div><img src={assetUrl('/assets/palms-team-feedback.png')} alt="Quotes from the team about finding designs, component flexibility and design consistency." loading="lazy" /></div></>
         : id === 'design-system-palms' && section.header === 'My approach' ? <ApproachCards content={section.content} results={project.approachResults ?? []} />
         : id === 'feature-improvement-sps' && section.header === 'Background' ? <div className="solver-background-grid"><div><StoryContent content={section.content} /></div><img src={assetUrl('/assets/solver-kaizen-wireframe.png')} alt="Simplified Solver Kaizen wireframe showing search, filters and a list of improvements with status, lead, sponsor, site and creation date. Content is anonymised." width={1586} height={992} loading="lazy" /></div>
-        : id === 'feature-improvement-sps' && section.header === 'My approach' ? <><ApproachTimeline content={section.content} /><img className="story-image solver-research-plan" src={assetUrl('/assets/solver-kaizen-research-plan.png')} alt="Kaizen concept research plan showing objectives, methodology, participants and questions across preparation, event and follow up phases, with sensitive details blurred." width={1727} height={911} loading="lazy" /></>
-        : id === 'feature-improvement-sps' && section.header === 'My contribution to the action workflow' ? <><StoryContent content={section.content} /><KaizenVideo /></>
+        : id === 'feature-improvement-sps' && section.header === 'Approach' ? <SolverApproach content={section.content} />
+        : id === 'feature-improvement-sps' && section.header === 'Solution' ? <><StoryContent content={section.content} /><img className="story-image solver-solution-workflow" src={assetUrl('/assets/solver-kaizen-solution-workflow.png')} alt="Five stages of the Kaizen workflow: prepare charter, sponsor approval, run event, follow up actions, and complete and share." width={2055} height={765} loading="lazy" /></>
+        : id === 'feature-improvement-sps' && section.header === 'My contribution' ? <><StoryContent content={section.content} /><KaizenVideo /></>
         : <StoryContent content={section.content} />}
       {index === 0 && section.header === 'Outcome' && <div className="case-gallery"><figure><img src={assetUrl('/assets/Group%2014.svg')} alt="Illustrative design system foundations" loading="lazy" /><figcaption>Design system foundations</figcaption></figure></div>}
     </section>)}
-    <p className="confidential-note">Some details and original project visuals are confidential. The images shown are illustrative mock-ups created for public viewing and do not represent the actual work. You’re welcome to <a href={`mailto:${email}`}>email me</a> for a chat.</p><div className="case-footer"><a className="button button-outline" href={`${import.meta.env.BASE_URL}#home`}>Back to Home</a><a className="button" href={projectUrl(projects[(index + 1) % projects.length].id)}>Next case study <CaretRight size={16} /></a></div></div></article>    </div>
+    <p className="confidential-note">Some details and original project visuals are confidential. The images shown are illustrative mock-ups created for public viewing and do not represent the actual work. You’re welcome to <a href={`mailto:${email}`}>email me</a> for a chat.</p>
+    <nav className="case-footer" aria-label="Case study navigation">
+      <a className="button button-outline" href={previousProject ? projectUrl(previousProject.id) : `${import.meta.env.BASE_URL}#home`}>{previousProject && <CaretLeft size={16} aria-hidden="true" />}<span>{previousProject ? 'Previous case study' : 'Back to home'}</span></a>
+      <a className="button" href={nextProject ? projectUrl(nextProject.id) : `${import.meta.env.BASE_URL}#home`}><span>{nextProject ? 'Next case study' : 'Back to home'}</span>{nextProject && <CaretRight size={16} aria-hidden="true" />}</a>
+    </nav></div></article>    </div>
     </div>
     <button className="case-back-top" aria-label="Back to top" title="Back to top"
       onClick={() => window.scrollTo({ top: 0, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' })}>
