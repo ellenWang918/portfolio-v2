@@ -22,8 +22,8 @@ npm run preview
 
 - Spacious hero with inline accent icons and a floating navigation pill.
 - Moving project gallery with pause, hover/focus pause, and reduced-motion support.
-- Five complete case studies with direct links, project navigation, keyboard dismissal, focus containment, and browser history support.
-- Research, Product, and Systems expertise tabs with keyboard navigation.
+- Four published case studies with standalone URLs, project navigation and browser history support; Customer Analysis is archived.
+- About me, Design system and Product tabs with keyboard navigation.
 - Responsive project grid, About section, email links, copy-email action, and social links.
 - Persisted light/dark preference and self-hosted fonts.
 
@@ -46,7 +46,9 @@ The recording is a layout reference. Homepage copy is adapted to Ellen's product
 
 ## Validation
 
-The production build and included hosting-worker tests pass. Browser checks cover desktop, tablet, 390px and 320px phone layouts; all five projects; direct-link reloads; keyboard controls; theme persistence; and contact interactions. See `design-qa.md` for the comparison record and `docs/screenshots` for previews.
+Run `npm run build`, `npm run test:sites`, and `npm run test:e2e` to check types, production packaging and visitor journeys. Install the test browser once with `npx playwright install chromium`. The browser suite checks desktop and mobile layouts against the production files on a static server with no single-page fallback: fresh case-study visits and refreshes, project navigation and history, keyboard tabs, accessible flip-card descriptions, and contact clipboard success/denial. Tests do not open an external email application.
+
+For the GitHub Pages variant, set `GITHUB_PAGES=true` for both the build and browser tests. CI checks that variant before publishing. Screenshots in `docs/screenshots` are visual references, not automated test results.
 
 ## Hosting
 
@@ -54,6 +56,6 @@ This is a static frontend. Email actions open the visitor's email client. A cust
 
 For Vercel, `vercel.json` explicitly selects Vite, runs `npm run build`, and publishes `dist/client`. This overrides an existing Next.js framework preset on the connected project. Requests to `/work/*` serve `index.html`, allowing case-study links, direct visits and refreshes to load the correct page.
 
-The GitHub Pages workflow builds and publishes the site after each push to `main`. It sets `GITHUB_PAGES=true` to use the repository's `/portfolio-v2/` base path. Local previews and other hosting targets use `/` by default.
+The GitHub Pages workflow builds and publishes the site after each push to `main`. It sets `GITHUB_PAGES=true` to use the repository's `/portfolio-v2/` base path. The build copies the app entry into `work/<project-id>/index.html` for each published project so a static host can serve direct visits and refreshes. Local previews and other hosting targets use `/` by default.
 
 The existing Sites-compatible worker and build adapter are preserved. `npm run build` creates `dist/client`, `dist/server`, and `dist/.openai/hosting.json`. Run `npm run test:sites` before a Sites handoff. For a conventional static host, publish `dist/client` with a single-page fallback to `index.html`.

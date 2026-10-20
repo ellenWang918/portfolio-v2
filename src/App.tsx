@@ -136,13 +136,35 @@ function InlineText({ text }: { text: string }) {
 }
 function ApproachCards({ content, results }: { content: string; results: string[] }) {
   const [flipped, setFlipped] = useState<number[]>([]);
+  const descriptionId = useId();
   const blocks = content.split(/\n\s*\n/).filter(Boolean);
   const steps = blocks.flatMap(block => block.split('\n')).filter(line => /^\d+\. /.test(line));
   return <><StoryContent content={blocks.filter(block => !/^\d+\. /.test(block)).join('\n\n')} /><ol className="result-cards">{steps.map((step, i) => {
     const match = step.match(/^\d+\. \*\*(.*?)\*\*\s*(.*)$/);
     if (!match) return null;
     const open = flipped.includes(i);
-    return <li key={match[1]}><button type="button" className={`result-card ${open ? 'is-flipped' : ''}`} aria-pressed={open} aria-label={`${i + 1}. ${match[1]}. ${open ? 'Show approach' : 'Show result'}`} onClick={() => setFlipped(previous => previous.includes(i) ? previous.filter(value => value !== i) : [...previous, i])}><span className="result-card-inner"><span className="result-card-front" aria-hidden={open}><span className="result-card-number">{String(i + 1).padStart(2, '0')}</span><strong>{match[1]}</strong><span>{match[2]}</span><span className="result-card-hint">View result ↗</span></span><span className="result-card-back" aria-hidden={!open}><span className="result-card-number">{String(i + 1).padStart(2, '0')}</span><strong>The result</strong><span>{results[i]}</span><span className="result-card-hint">Back to approach ↩</span></span></span></button></li>;
+    const approachId = `${descriptionId}-${i}-approach`;
+    const resultId = `${descriptionId}-${i}-result`;
+    return <li key={match[1]}>
+      <button type="button" className={`result-card ${open ? 'is-flipped' : ''}`}
+        aria-pressed={open}
+        aria-label={`${i + 1}. ${match[1]}. ${open ? 'Show approach' : 'Show result'}`}
+        aria-describedby={open ? resultId : approachId}
+        onClick={() => setFlipped(previous => previous.includes(i) ? previous.filter(value => value !== i) : [...previous, i])}>
+        <span className="result-card-inner">
+          <span className="result-card-front" aria-hidden={open}>
+            <span className="result-card-number">{String(i + 1).padStart(2, '0')}</span>
+            <strong>{match[1]}</strong><span id={approachId}>{match[2]}</span>
+            <span className="result-card-hint">View result ↗</span>
+          </span>
+          <span className="result-card-back" aria-hidden={!open}>
+            <span className="result-card-number">{String(i + 1).padStart(2, '0')}</span>
+            <strong>The result</strong><span id={resultId}>{results[i]}</span>
+            <span className="result-card-hint">Back to approach ↩</span>
+          </span>
+        </span>
+      </button>
+    </li>;
   })}</ol></>;
 }
 function KaizenVideo() {

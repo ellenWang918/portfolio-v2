@@ -29,6 +29,12 @@ jobs:
           GITHUB_PAGES: 'true'
       - name: Check hosting adapter
         run: npm run test:sites
+      - name: Install browser for visitor checks
+        run: npx playwright install --with-deps chromium
+      - name: Check visitor journeys on the Pages build
+        run: npm run test:e2e
+        env:
+          GITHUB_PAGES: 'true'
       - uses: actions/upload-pages-artifact@v4
         with:
           path: dist/client
