@@ -132,6 +132,8 @@ Use a visible but soft diffuse cyan/lime glow behind the Home headline (弥散�
 
 Apply a matching diffuse cyan/lime glow behind the header area of case-study pages, fading out before the main story content, with mobile adjustments and restrained dark-mode opacity.
 
+Make all case-study diffuse backgrounds span the full screen width, including the header and body glows. Keep the case-study content within its existing centred container and preserve its gutters.
+
 Scatter subtle static cyan and lime diffuse glows at irregular positions down case-study bodies, preserving text readability, with responsive mobile sizing and reduced dark-mode opacity.
 
 
@@ -147,3 +149,19 @@ Use #f0f3f5 for PALMS approach card fronts and #e3f4f7 for result backs in the l
 
 
 Use plain PALMS flip cards without notebook ruling, punched holes, folded corners or paper shadows. Preserve grey fronts, pale cyan backs and 24px Space Grotesk numbers.
+
+Keep a Background section immediately after Overview in the Feature Improvement & MVP Validation case study. Use the approved three-paragraph narrative covering Solver within Rio Tinto’s Safe Production System, the fragmented Kaizen workflow, and introducing Kaizen into Solver with accountability and flexibility.
+
+Use the supplied Solver Kaizen list wireframe (public/assets/solver-kaizen-wireframe.png) below all Feature Improvement Background text at every screen size, spanning the article width. Preserve the full image and its intrinsic aspect ratio.
+
+Keep the Feature Improvement Background text-to-image spacing at one quarter of its original size: 7px grid gap on desktop and 5px at 1055px and below, plus a 4px final paragraph bottom margin.
+
+Follow Feature Improvement Background with My approach: show five steps as a vertical timeline on the left and the approved four narrative paragraphs on the right, aligned at the top. Stack the steps above the narrative at 1055px and below. Match the supplied timeline reference with connected dots, bold titles, and descriptions below. Use unhyphenated wording such as follow up, task based, and action tracking in this section. Preserve the content, order, responsive layout, and theme-aware colours.
+
+Show the supplied Kaizen research plan image (public/assets/solver-kaizen-research-plan.png) below the My approach steps and narrative, spanning the full article width with its original proportions and blurred details preserved.
+
+Place a Solution section immediately after My approach in the Feature Improvement case study.
+
+Give “digital charter” in Solution a brand lime dotted underline and a tooltip card containing the approved charter explanation and its five parts. Support hover, keyboard focus, Escape dismissal and tap, with a theme-aware card constrained to the viewport.
+
+Show public/assets/kaizen-task-click-demo-v1.mp4 below the text in Feature Improvement’s My contribution to the action workflow section. Use a responsive full-width video with muted autoplay, automatic looping, and inline mobile playback. Replace native controls with two 32px grey circular buttons at the bottom right: Pause/Play with a 16px icon and Replay with an 18px icon. Reveal controls on video hover and hide them when the pointer leaves, including after a mouse click; keyboard focus-visible may reveal them for accessibility. Preserve reduced-motion support for transitions.

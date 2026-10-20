@@ -1,7 +1,8 @@
-import { Fragment, useEffect, useRef, useState } from 'react';
+import { Fragment, useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 
 import type { Icon as PhosphorIcon } from '@phosphor-icons/react';
-import { Eye, Stack, Sparkle, MapPin, Sun, Moon, EnvelopeSimple, LinkedinLogo, GithubLogo, Compass, GridFour, Check, Copy, CaretRight, CaretUp, ArrowRight, ArrowLeft } from '@phosphor-icons/react';
+import { Eye, Stack, Sparkle, MapPin, Sun, Moon, EnvelopeSimple, LinkedinLogo, GithubLogo, Compass, GridFour, Check, Copy, CaretRight, CaretUp, ArrowRight, ArrowLeft, Pause, Play, ArrowCounterClockwise } from '@phosphor-icons/react';
 import projects from './data/projects.json';
 import { CapsuleNav } from './CapsuleNav';
 import { ExpertiseTabs } from './ExpertiseTabs';
@@ -65,8 +66,73 @@ function ProjectCard({ index }: ProjectCardProps) {
   </a>;
 }
 // Source content uses paragraphs, emphasis and lists. Render text without executable HTML.
+function CharterDefinition() {
+  const [open, setOpen] = useState(false);
+  const [position, setPosition] = useState({ left: 16, top: 16 });
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const closeTimer = useRef<number | undefined>(undefined);
+  const tooltipId = useId();
+  const cancelClose = () => window.clearTimeout(closeTimer.current);
+  const show = () => { cancelClose(); setOpen(true); };
+  const scheduleClose = () => {
+    cancelClose();
+    closeTimer.current = window.setTimeout(() => {
+      if (document.activeElement !== triggerRef.current) setOpen(false);
+    }, 120);
+  };
+  useEffect(() => () => window.clearTimeout(closeTimer.current), []);
+  useLayoutEffect(() => {
+    if (!open) return;
+    const updatePosition = () => {
+      const trigger = triggerRef.current?.getBoundingClientRect();
+      const card = cardRef.current?.getBoundingClientRect();
+      if (!trigger || !card) return;
+      const viewportWidth = document.documentElement.clientWidth;
+      const viewportHeight = window.innerHeight;
+      const below = trigger.bottom + 10;
+      const top = below + card.height <= viewportHeight - 16 ? below : trigger.top - card.height - 10;
+      setPosition({
+        left: Math.max(16, Math.min(trigger.left, viewportWidth - card.width - 16)),
+        top: Math.max(16, Math.min(top, viewportHeight - card.height - 16)),
+      });
+    };
+    updatePosition();
+    window.addEventListener('resize', updatePosition);
+    window.addEventListener('scroll', updatePosition, true);
+    return () => {
+      window.removeEventListener('resize', updatePosition);
+      window.removeEventListener('scroll', updatePosition, true);
+    };
+  }, [open]);
+  useEffect(() => {
+    if (!open) return;
+    const dismissOutside = (event: PointerEvent) => {
+      if (event.target instanceof Node && !triggerRef.current?.contains(event.target) && !cardRef.current?.contains(event.target)) setOpen(false);
+    };
+    const dismissOnEscape = (event: KeyboardEvent) => { if (event.key === 'Escape') { cancelClose(); setOpen(false); } };
+    document.addEventListener('pointerdown', dismissOutside);
+    document.addEventListener('keydown', dismissOnEscape);
+    return () => {
+      document.removeEventListener('pointerdown', dismissOutside);
+      document.removeEventListener('keydown', dismissOnEscape);
+    };
+  }, [open]);
+  return <><button ref={triggerRef} type="button" className="charter-definition-trigger" aria-describedby={open ? tooltipId : undefined} onMouseEnter={show} onMouseLeave={scheduleClose} onFocus={show} onBlur={() => setOpen(false)} onClick={show}>digital charter</button>
+    {open && createPortal(<div ref={cardRef} id={tooltipId} role="tooltip" className="charter-definition-card" style={position} onMouseEnter={cancelClose} onMouseLeave={scheduleClose}>
+      <p>A <strong>charter</strong> is the plan that defines a Kaizen before the improvement event begins. It helps the team and sponsor agree on:</p>
+      <ul>
+        <li><strong>Problem:</strong> What needs to improve, and why?</li>
+        <li><strong>Objectives:</strong> What results are expected, and how will success be measured?</li>
+        <li><strong>Scope:</strong> What is included and excluded?</li>
+        <li><strong>People:</strong> Who sponsors, leads, facilitates, and participates?</li>
+        <li><strong>Timeline and resources:</strong> When will it happen, and what support is needed?</li>
+      </ul>
+    </div>, document.body)}
+  </>;
+}
 function InlineText({ text }: { text: string }) {
-  return text.split(/(\*\*[^*]+\*\*)/g).map((piece, i) => piece.startsWith('**') ? <strong key={i}>{piece.slice(2, -2)}</strong> : piece);
+  return text.split(/(\*\*[^*]+\*\*)/g).map((piece, i) => piece === '**digital charter**' ? <CharterDefinition key={i} /> : piece.startsWith('**') ? <strong key={i}>{piece.slice(2, -2)}</strong> : piece);
 }
 function ApproachCards({ content, results }: { content: string; results: string[] }) {
   const [flipped, setFlipped] = useState<number[]>([]);
@@ -78,6 +144,39 @@ function ApproachCards({ content, results }: { content: string; results: string[
     const open = flipped.includes(i);
     return <li key={match[1]}><button type="button" className={`result-card ${open ? 'is-flipped' : ''}`} aria-pressed={open} aria-label={`${i + 1}. ${match[1]}. ${open ? 'Show approach' : 'Show result'}`} onClick={() => setFlipped(previous => previous.includes(i) ? previous.filter(value => value !== i) : [...previous, i])}><span className="result-card-inner"><span className="result-card-front" aria-hidden={open}><span className="result-card-number">{String(i + 1).padStart(2, '0')}</span><strong>{match[1]}</strong><span>{match[2]}</span><span className="result-card-hint">View result ↗</span></span><span className="result-card-back" aria-hidden={!open}><span className="result-card-number">{String(i + 1).padStart(2, '0')}</span><strong>The result</strong><span>{results[i]}</span><span className="result-card-hint">Back to approach ↩</span></span></span></button></li>;
   })}</ol></>;
+}
+function KaizenVideo() {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [playing, setPlaying] = useState(false);
+  const play = () => { void videoRef.current?.play().catch(() => setPlaying(false)); };
+  const togglePlayback = () => {
+    if (videoRef.current?.paused) play();
+    else videoRef.current?.pause();
+  };
+  const replay = () => {
+    if (!videoRef.current) return;
+    videoRef.current.currentTime = 0;
+    play();
+  };
+  return <div className="story-video-player">
+    <video ref={videoRef} className="story-video" autoPlay muted loop playsInline preload="metadata" aria-label="Kaizen task interaction demo" onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)} onEnded={() => setPlaying(false)}>
+      <source src={assetUrl('/assets/kaizen-task-click-demo-v1.mp4')} type="video/mp4" />
+      Your browser does not support embedded video. <a href={assetUrl('/assets/kaizen-task-click-demo-v1.mp4')}>Watch the Kaizen task interaction demo</a>.
+    </video>
+    <div className="story-video-controls" role="group" aria-label="Video playback">
+      <button type="button" aria-label={playing ? 'Pause video' : 'Play video'} title={playing ? 'Pause' : 'Play'} onClick={togglePlayback}>{playing ? <Pause size={16} weight="fill" aria-hidden="true" /> : <Play size={16} weight="fill" aria-hidden="true" />}</button>
+      <button type="button" aria-label="Replay video" title="Replay" onClick={replay}><ArrowCounterClockwise size={18} aria-hidden="true" /></button>
+    </div>
+  </div>;
+}
+function ApproachTimeline({ content }: { content: string }) {
+  const blocks = content.split(/\n\s*\n/).filter(Boolean);
+  const steps = blocks.filter(block => block.startsWith('**'));
+  const introduction = blocks.filter(block => !block.startsWith('**')).join('\n\n');
+  return <div className="approach-layout"><ol className="approach-timeline" role="list">{steps.map((step, i) => {
+    const [title, ...description] = step.split('\n');
+    return <li key={i}><strong>{title.replace(/^\*\*|\*\*$/g, '')}</strong><p>{description.join(' ')}</p></li>;
+  })}</ol><div className="approach-narrative"><StoryContent content={introduction} /></div></div>;
 }
 function StoryContent({ content, showPalmsComparison = false }: { content: string; showPalmsComparison?: boolean }) {
   return content.split(/\n\s*\n/).filter(Boolean).map((block, i) => {
@@ -91,9 +190,10 @@ function StoryContent({ content, showPalmsComparison = false }: { content: strin
 function CaseStudy({ id }: { id: ProjectId }) {
   const articleRef = useRef<HTMLElement>(null);
   const index = projects.findIndex(p => p.id === id), project = projects[index];
-  const sections = project.story.filter(section => section.content);
-  return <main id="main" className="case-page container">
+  const sections = project.story.filter(section => section.content || section.header === 'Solution');
+  return <main id="main" className="case-page">
     <ReadingProgress key={id} articleRef={articleRef} />
+    <div className="case-container container">
     <div className="case-toolbar"><span className="mono">ELLEN WANG / SELECTED WORK / 0{index + 1}</span><a className="text-button case-back" href={`${import.meta.env.BASE_URL}#home`}><ArrowLeft size={16} aria-hidden="true" /><span className="text-button-label">Back to Home</span></a></div>
     <div className="case-body">
       <details className="case-project-picker" key={id}>
@@ -113,8 +213,18 @@ function CaseStudy({ id }: { id: ProjectId }) {
       <article id="case-article" className="case-content" ref={articleRef}>
         <img className="case-editorial" src={assetUrl(project.hero.src)} alt={project.hero.alt} />
         <div className="case-copy"><div className="project-tags">{project.tags.map(tag => <span className="badge" key={tag}>{tag}</span>)}</div><h1 id="case-title">{project.title}</h1><p className="case-summary">{project.summary}</p><dl className="case-metadata">{project.metadata.map(m => <div key={m.label}><dt className="mono">{m.label}</dt><dd>{m.value}</dd></div>)}</dl>
-    {sections.map((section, i) => <section className={`story-section ${id === 'design-system-palms' && section.header === 'Background' ? 'palms-background' : id === 'design-system-palms' && section.header === 'My approach' ? 'palms-approach' : ''}`} id={`case-section-${i}`} key={section.header}><div className="story-heading"><span className="mono">0{i + 1}</span><h2>{section.header}</h2></div>{id === 'design-system-palms' && section.header === 'Background' ? <><StoryContent content={section.content.split('\n\n').slice(0, 2).join('\n\n')} showPalmsComparison /><div className="palms-background-insight"><div><StoryContent content={section.content.split('\n\n').slice(2).join('\n\n')} /></div><img src={assetUrl('/assets/palms-team-feedback.png')} alt="Quotes from the team about finding designs, component flexibility and design consistency." loading="lazy" /></div></>  : id === 'design-system-palms' && section.header === 'My approach' ? <><ApproachCards content={section.content} results={project.approachResults ?? []} /></> : <StoryContent content={section.content} />}{index === 0 && section.header === 'Outcome' && <div className="case-gallery"><figure><img src={assetUrl('/assets/Group%2014.svg')} alt="Illustrative design system foundations" loading="lazy" /><figcaption>Design system foundations</figcaption></figure></div>}</section>)}
+    {sections.map((section, i) => <section className={`story-section ${id === 'design-system-palms' && section.header === 'Background' ? 'palms-background' : id === 'design-system-palms' && section.header === 'My approach' ? 'palms-approach' : ''}`} id={`case-section-${i}`} key={section.header}>
+      <div className="story-heading"><span className="mono">0{i + 1}</span><h2>{section.header}</h2></div>
+      {id === 'design-system-palms' && section.header === 'Background' ? <><StoryContent content={section.content.split('\n\n').slice(0, 2).join('\n\n')} showPalmsComparison /><div className="palms-background-insight"><div><StoryContent content={section.content.split('\n\n').slice(2).join('\n\n')} /></div><img src={assetUrl('/assets/palms-team-feedback.png')} alt="Quotes from the team about finding designs, component flexibility and design consistency." loading="lazy" /></div></>
+        : id === 'design-system-palms' && section.header === 'My approach' ? <ApproachCards content={section.content} results={project.approachResults ?? []} />
+        : id === 'feature-improvement-sps' && section.header === 'Background' ? <div className="solver-background-grid"><div><StoryContent content={section.content} /></div><img src={assetUrl('/assets/solver-kaizen-wireframe.png')} alt="Simplified Solver Kaizen wireframe showing search, filters and a list of improvements with status, lead, sponsor, site and creation date. Content is anonymised." width={1586} height={992} loading="lazy" /></div>
+        : id === 'feature-improvement-sps' && section.header === 'My approach' ? <><ApproachTimeline content={section.content} /><img className="story-image solver-research-plan" src={assetUrl('/assets/solver-kaizen-research-plan.png')} alt="Kaizen concept research plan showing objectives, methodology, participants and questions across preparation, event and follow up phases, with sensitive details blurred." width={1727} height={911} loading="lazy" /></>
+        : id === 'feature-improvement-sps' && section.header === 'My contribution to the action workflow' ? <><StoryContent content={section.content} /><KaizenVideo /></>
+        : <StoryContent content={section.content} />}
+      {index === 0 && section.header === 'Outcome' && <div className="case-gallery"><figure><img src={assetUrl('/assets/Group%2014.svg')} alt="Illustrative design system foundations" loading="lazy" /><figcaption>Design system foundations</figcaption></figure></div>}
+    </section>)}
     <p className="confidential-note">Some details and original project visuals are confidential. The images shown are illustrative mock-ups created for public viewing and do not represent the actual work. You’re welcome to <a href={`mailto:${email}`}>email me</a> for a chat.</p><div className="case-footer"><a className="button button-outline" href={`${import.meta.env.BASE_URL}#home`}>Back to Home</a><a className="button" href={projectUrl(projects[(index + 1) % projects.length].id)}>Next case study <CaretRight size={16} /></a></div></div></article>    </div>
+    </div>
     <button className="case-back-top" aria-label="Back to top" title="Back to top"
       onClick={() => window.scrollTo({ top: 0, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' })}>
       <CaretUp size={22} aria-hidden="true" />
