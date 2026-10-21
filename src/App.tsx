@@ -45,10 +45,32 @@ function ComplexityScribble() {
     </svg>
   </span>;
 }
+function PalmsMotionCover({ className = '', controls = false }: { className?: string; controls?: boolean }) {
+  const [paused, setPaused] = useState(false);
+  return <div className={`palms-motion-cover ${paused ? 'is-paused' : ''} ${className}`}>
+    <img className="palms-motion-field" src={assetUrl('/assets/palms-blue-motion-field-v1.png')} alt="" aria-hidden="true" width={1672} height={941} />
+    <img className="palms-motion-field palms-motion-field-secondary" src={assetUrl('/assets/palms-blue-motion-field-v1.png')} alt="" aria-hidden="true" width={1672} height={941} />
+    <strong className="palms-motion-title">PALMS Design System</strong>
+    {controls && <button className="palms-motion-toggle" type="button" aria-label={paused ? 'Play cover animation' : 'Pause cover animation'} aria-pressed={paused} onClick={() => setPaused(value => !value)}>{paused ? <Play size={16} weight="fill" aria-hidden="true" /> : <Pause size={16} weight="fill" aria-hidden="true" />}</button>}
+  </div>;
+}
+function SolverCover({ className = '', loading = 'lazy' }: { className?: string; loading?: 'eager' | 'lazy' }) {
+  return <div className={`solver-preview ${className}`}>
+    <div className="solver-preview-screen solver-preview-back">
+      <img src={assetUrl('/assets/solver-kaizen-wireframe.png')} alt="Solver Kaizen improvement list with search, filters and status tracking" width={1586} height={992} loading={loading} />
+    </div>
+    <div className="solver-preview-screen solver-preview-front">
+      <img src={assetUrl('/assets/solver-action-board-preview.png')} alt="Solver Kanban action board with Created, Endorsed, In progress and Completed columns" width={1600} height={1000} loading={loading} />
+    </div>
+    <div className="preview-copy"><strong className="preview-title">Solver</strong><p>A clearer way to track Kaizen actions.</p></div>
+  </div>;
+}
 function ProjectArtwork({ index, className = '' }: ProjectArtworkProps) {
+  if (projects[index].id === 'design-system-palms') return <PalmsMotionCover className={`artwork artwork-${index} ${className}`} />;
+  if (projects[index].id === 'feature-improvement-sps') return <SolverCover className={`artwork artwork-${index} ${className}`} />;
   return <div className={`artwork artwork-${index} ${className}`}>
     <span className="artwork-label" aria-hidden="true">{outcomes[index].category}</span>
-    {index === 0 ? <img className="system-shot" src={assetUrl('/assets/Group%2014.svg')} alt="Illustrative design system foundations: colour, typography and components" loading="lazy" /> : <img className="editorial-art" src={assetUrl(projects[index].hero.src)} alt={projects[index].hero.alt} loading="lazy" />}
+    <img className="editorial-art" src={assetUrl(projects[index].hero.src)} alt={projects[index].hero.alt} loading="lazy" />
     <span className="artwork-index" aria-hidden="true">0{index + 1}</span>
   </div>;
 }
@@ -235,7 +257,7 @@ function CaseStudy({ id }: { id: ProjectId }) {
         </div>
       </aside>
       <article id="case-article" className="case-content" ref={articleRef}>
-        <img className="case-editorial" src={assetUrl(project.hero.src)} alt={project.hero.alt} />
+        {id === 'design-system-palms' ? <PalmsMotionCover className="case-editorial" controls /> : id === 'feature-improvement-sps' ? <SolverCover className="case-editorial" loading="eager" /> : <img className="case-editorial" src={assetUrl(project.hero.src)} alt={project.hero.alt} />}
         <div className="case-copy"><div className="project-tags">{project.tags.map(tag => <span className="badge" key={tag}>{tag}</span>)}</div><h1 id="case-title">{project.title}</h1><p className="case-summary">{project.summary}</p><dl className="case-metadata">{project.metadata.map(m => <div key={m.label}><dt className="mono">{m.label}</dt><dd>{m.value}</dd></div>)}</dl>
     {sections.map((section, i) => <section className={`story-section ${id === 'design-system-palms' && section.header === 'Background' ? 'palms-background' : id === 'design-system-palms' && section.header === 'My approach' ? 'palms-approach' : ''}`} id={`case-section-${i}`} key={section.header}>
       <div className="story-heading"><span className="mono">0{i + 1}</span><h2>{section.header}</h2></div>
