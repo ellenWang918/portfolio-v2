@@ -1,16 +1,26 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Locator } from '@playwright/test';
 import projects from '../../src/data/projects.json' with { type: 'json' };
+
+async function expectCoverLoaded(cover: Locator) {
+  await expect(cover).toBeVisible();
+  await expect.poll(() => cover.evaluate(element => {
+    const images = element instanceof HTMLImageElement
+      ? [element]
+      : Array.from(element.querySelectorAll('img'));
+    return images.length > 0 && images.every(image => image.complete && image.naturalWidth > 0);
+  }), { message: 'Every image in the case-study cover must load' }).toBe(true);
+}
 
 test('every published case study supports fresh visits and reloads', async ({ page, request }) => {
   for (const project of projects) {
     const response = await page.goto(`./work/${project.id}`);
     expect(response?.status()).toBe(200);
     await expect(page.getByRole('heading', { level: 1, name: project.title, exact: true })).toBeVisible();
+    const hero = page.locator('.case-editorial');
+    await expectCoverLoaded(hero);
     await page.reload();
     await expect(page.getByRole('heading', { level: 1, name: project.title, exact: true })).toBeVisible();
-    const hero = page.locator('.case-editorial');
-    await expect(hero).toBeVisible();
-    await expect.poll(() => hero.evaluate(image => image instanceof HTMLImageElement && image.naturalWidth > 0)).toBe(true);
+    await expectCoverLoaded(hero);
   }
   expect((await request.get('./work/customer-data-analysis-commercial')).status()).toBe(404);
 });
