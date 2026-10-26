@@ -93,7 +93,7 @@
       },
       {
         "label": "Year",
-        "value": "Feb 2025 - Sep 2026"
+        "value": "Feb 2025 - Sep 2025"
       }
     ],
     "story": [
@@ -124,66 +124,6 @@
       {
         "header": "What I learned",
         "content": "This project reinforced the value of empathy and observation as a product designer. Listening to users revealed their challenges, while observing their spreadsheet workflows helped me recognise a familiar pattern we could bring into Solver.\n\nIt also taught me to examine my own assumptions. My experience with Notion influenced my preference for offering both table and board views. Discussing the trade-off with the senior designer and technical lead helped me prioritise user value alongside delivery effort and become more comfortable adapting an idea I had invested in."
-      }
-    ],
-    "confidential": true
-  },
-  {
-    "id": "business-process-improvement-plm",
-    "title": "Service Design & Workflow Mapping",
-    "folderTitle": "Service Design",
-    "folderArtwork": {
-      "src": "/assets/service-design-drawing.svg",
-      "alt": "Service Design drawing"
-    },
-    "summary": "A mobile maintenance product that digitises field workflows and connects with enterprise systems.",
-    "hero": {
-      "src": "/assets/service-design-editorial.svg",
-      "alt": "Service Design project hero"
-    },
-    "tags": [
-      "Service Design",
-      "Workflow Mapping",
-      "Research Synthesis"
-    ],
-    "metadata": [
-      {
-        "label": "Company",
-        "value": "Rio Tinto"
-      },
-      {
-        "label": "Role",
-        "value": "Digital graduate product designer"
-      },
-      {
-        "label": "Year",
-        "value": "Feb 2024 - Oct 2024"
-      }
-    ],
-    "story": [
-      {
-        "header": "Overview",
-        "content": "The existing product was an Android mobile based digitalised maintenance paperword application. It allowed field personnel to view digital work orders and attachments and record maintenance information that would traditionally be pure paper based and handled through a central enterprise asset management system. \n\nAlthough core maintenance activities had already been digitised, checklist related workflows remained fragmented across paper forms, digital PDF editor and specialised systems."
-      },
-      {
-        "header": "Research",
-        "content": "We conducted 16 interviews across eight business groups. I participated in research planning, contributed to the moderation guide, attended every interview, supported parts of the facilitation, acted as note taker and organised the findings.\n\nThe study first explored a broad range of roles, processes and tools, then converged to identify:\n\n- Common pain points across groups\n- Requirements specific to specialised workflows\n- The strongest customer group for an initial solution\n- The business and technical information required before prototyping"
-      },
-      {
-        "header": "My reasoning",
-        "content": "Separate journey maps would preserve detail but make comparison difficult. One generic process would be easier to understand but would erase role specific requirements.\n\nI therefore independently created a layered service blueprint combining:\n\n1. A generic end-to-end customer process\n2. A customer journey for each business group\n3. User roles, goals and behaviours\n4. Front-end product interactions\n5. Back-end software and system dependencies\n6. Handoffs between teams and systems\n7. Pain points positioned at the exact process stage where they occurred\n\nPlacing pain points inside the process made it possible to connect a visible user problem with its operational or technical cause. Additionally, I validated the system relationships with the Solution Architect to make sure the blueprint aligned with the overall technical architecture."
-      },
-      {
-        "header": "Outcome",
-        "content": "The blueprint gave design, business and technology a shared view of the Digital Checklist ecosystem. It helped the team compare customer groups, distinguish common and specialised requirements, identify system dependencies and prioritise an initial direction.\n\nThe project subsequently progressed into design and development. A later stakeholder review grouped feedback into themes, prioritised issues and translated them into recommendations. I did not participate in that later phase, so it is presented as a project outcome rather than a result directly delivered by me."
-      },
-      {
-        "header": "Additional contribution - Design system documentation",
-        "content": "I also established the product's design system documentation format and independently authored the available component guidance, covering usage, hierarchy, variants, states, anatomy, dimensions, alignment, content, icons, accessibility, exceptions and product examples."
-      },
-      {
-        "header": "Reflection",
-        "content": "The blueprint was valuable because it did more than summarise interviews. It organised evidence so that different disciplines could reason about the same service. If I continued into implementation, I would link each prioritised pain point to a product requirement and define success measures before handover."
       }
     ],
     "confidential": true
@@ -285,6 +225,66 @@
       {
         "header": "Reflection",
         "content": "Working with a senior designer did not mean duplicating the same responsibilities. My contribution was strongest where rapid structuring and execution were needed: proposing the alignment method, owning the short-term experience and turning a draft flow into a coherent prototype that could be tested and handed over."
+      }
+    ],
+    "confidential": true
+  },
+  {
+    "id": "business-process-improvement-plm",
+    "title": "Service Design & Workflow Mapping",
+    "folderTitle": "Service Design",
+    "folderArtwork": {
+      "src": "/assets/service-design-drawing.svg",
+      "alt": "Service Design drawing"
+    },
+    "summary": "A mobile maintenance product that digitises field workflows and connects with enterprise systems.",
+    "hero": {
+      "src": "/assets/service-design-editorial.svg",
+      "alt": "Service Design project hero"
+    },
+    "tags": [
+      "Service Design",
+      "Workflow Mapping",
+      "Research Synthesis"
+    ],
+    "metadata": [
+      {
+        "label": "Company",
+        "value": "Rio Tinto"
+      },
+      {
+        "label": "Role",
+        "value": "Digital graduate product designer"
+      },
+      {
+        "label": "Year",
+        "value": "Dec 2023 - Oct 2024"
+      }
+    ],
+    "story": [
+      {
+        "header": "Overview",
+        "content": "The existing product was an Android mobile based digitalised maintenance paperword application. It allowed field personnel to view digital work orders and attachments and record maintenance information that would traditionally be pure paper based and handled through a central enterprise asset management system. \n\nAlthough core maintenance activities had already been digitised, checklist related workflows remained fragmented across paper forms, digital PDF editor and specialised systems."
+      },
+      {
+        "header": "Research",
+        "content": "We conducted 16 interviews across eight business groups. I participated in research planning, contributed to the moderation guide, attended every interview, supported parts of the facilitation, acted as note taker and organised the findings.\n\nThe study first explored a broad range of roles, processes and tools, then converged to identify:\n\n- Common pain points across groups\n- Requirements specific to specialised workflows\n- The strongest customer group for an initial solution\n- The business and technical information required before prototyping"
+      },
+      {
+        "header": "My reasoning",
+        "content": "Separate journey maps would preserve detail but make comparison difficult. One generic process would be easier to understand but would erase role specific requirements.\n\nI therefore independently created a layered service blueprint combining:\n\n1. A generic end-to-end customer process\n2. A customer journey for each business group\n3. User roles, goals and behaviours\n4. Front-end product interactions\n5. Back-end software and system dependencies\n6. Handoffs between teams and systems\n7. Pain points positioned at the exact process stage where they occurred\n\nPlacing pain points inside the process made it possible to connect a visible user problem with its operational or technical cause. Additionally, I validated the system relationships with the Solution Architect to make sure the blueprint aligned with the overall technical architecture."
+      },
+      {
+        "header": "Outcome",
+        "content": "The blueprint gave design, business and technology a shared view of the Digital Checklist ecosystem. It helped the team compare customer groups, distinguish common and specialised requirements, identify system dependencies and prioritise an initial direction.\n\nThe project subsequently progressed into design and development. A later stakeholder review grouped feedback into themes, prioritised issues and translated them into recommendations. I did not participate in that later phase, so it is presented as a project outcome rather than a result directly delivered by me."
+      },
+      {
+        "header": "Additional contribution - Design system documentation",
+        "content": "I also established the product's design system documentation format and independently authored the available component guidance, covering usage, hierarchy, variants, states, anatomy, dimensions, alignment, content, icons, accessibility, exceptions and product examples."
+      },
+      {
+        "header": "Reflection",
+        "content": "The blueprint was valuable because it did more than summarise interviews. It organised evidence so that different disciplines could reason about the same service. If I continued into implementation, I would link each prioritised pain point to a product requirement and define success measures before handover."
       }
     ],
     "confidential": true

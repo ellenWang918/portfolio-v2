@@ -28,12 +28,12 @@ const socials = [
 const outcomes = [
   { value: '100%', label: 'design team adoption', short: 'One shared source of truth.', category: 'Design systems' },
   { value: '4', label: 'usability sessions', short: 'A familiar pattern. A feasible MVP.', category: 'Product design' },
-  { value: '16', label: 'interviews across 8 groups', short: 'Connecting people, processes & systems.', category: 'Service design' },
   { value: '12', label: 'user stories prototyped', short: 'From complex requirements to a testable experience.', category: 'Discovery & prototyping' },
+  { value: '16', label: 'interviews across 8 groups', short: 'Connecting people, processes & systems.', category: 'Service design' },
 ];
 const expertise = [
   { name: 'Design system', Icon: GridFour, title: 'Build clarity that scales.', text: 'A design system connects components, people and delivery practices. I create reusable foundations, practical documentation and shared workflows to keep design and development aligned.', skills: ['Design systems', 'Documentation', 'Design governance'], project: 0 },
-  { name: 'Product', Icon: Compass, title: 'Make complexity usable.', text: 'I turn complex workflows into clear interactions and testable prototypes. Working closely with engineering, I balance user needs with technical feasibility to shape an achievable first release.', skills: ['Product strategy', 'Interaction design', 'Prototyping'], project: 3 },
+  { name: 'Product', Icon: Compass, title: 'Make complexity usable.', text: 'I turn complex workflows into clear interactions and testable prototypes. Working closely with engineering, I balance user needs with technical feasibility to shape an achievable first release.', skills: ['Product strategy', 'Interaction design', 'Prototyping'], project: 2 },
 ];
 function InlineAccent({ tone, Icon, className = '' }: InlineAccentProps) {
   return <span className={`inline-accent accent-${tone} ${className}`} aria-hidden="true"><Icon weight="bold" /></span>;
@@ -87,7 +87,7 @@ function ProjectCard({ index }: ProjectCardProps) {
       <div className="project-meta"><span>RIO TINTO</span><span>{project.metadata[2].value}</span></div>
       <div className="project-tags">{project.tags.slice(0, 2).map(tag => <span className="badge" key={tag}>{tag}</span>)}</div>
       <h3>{project.title}</h3>
-      <p>{outcomes[index].short}</p>
+      <p>{project.summary}</p>
       <span className="read-case"><span className="text-button-label">Read the case study</span><ArrowRight size={16} aria-hidden="true" /></span>
     </div>
   </a>;

@@ -2,6 +2,10 @@
 
 Use square corners for case-study header artwork on desktop and mobile.
 
+Use each project's summary as the paragraph beneath its heading on the homepage Selected work card.
+
+Order published projects as 01 PALMS Design System, 02 Solver, 03 Heritage Schedule and 04 Service Design across homepage cards, carousel, case-study navigation and previous/next links. Keep each project's existing artwork colours, copy and routes, and keep the About Product tab's related project linked to Heritage Schedule.
+
 Use Heritage Schedule as the title of the former Rapid Discovery & Prototyping case study, including the page heading, homepage Work card, carousel caption, desktop and compact case-study navigation, and browser title. Keep the existing rapid-discovery-ism route.
 
 Use Workflow clarity, Rapid prototyping and Usability testing as the Rapid Discovery & Prototyping case-study tags, in that order.
