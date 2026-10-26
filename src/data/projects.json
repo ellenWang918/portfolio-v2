@@ -190,21 +190,21 @@
   },
   {
     "id": "rapid-discovery-ism",
-    "title": "Rapid Discovery & Prototyping",
-    "folderTitle": "Rapid Discovery",
+    "title": "Heritage Schedule",
+    "folderTitle": "Heritage Schedule",
     "folderArtwork": {
       "src": "/assets/rapid-discovery-drawing.svg",
-      "alt": "Rapid Discovery drawing"
+      "alt": "Heritage Schedule drawing"
     },
     "summary": "A rapid discovery engagement focused on a complex operational scheduling experience.",
     "hero": {
-      "src": "/assets/rapid-design-editorial.svg",
-      "alt": "Rapid Discovery project hero"
+      "src": "/assets/heritage-schedule-cover-v1.png",
+      "alt": "Heritage Schedule, with a softly faded dotted double diamond on a pale warm-grey background"
     },
     "tags": [
-      "Rapid Discovery",
-      "Prototyping",
-      "Product Alignment"
+      "Workflow clarity",
+      "Rapid prototyping",
+      "Usability testing"
     ],
     "metadata": [
       {
@@ -222,20 +222,65 @@
     ],
     "story": [
       {
-        "header": "Overview",
-        "content": "The planning team relied on spreadsheets, macros and separate scheduling files to manage interconnected long-term and operational plans. Frequent priority changes required manual rescheduling, while data moved through several systems before reaching the reports used by the wider business.\n\nThe domain was unfamiliar and technically complex. Before moving into interface design, the design team needed a reliable way to capture terminology, assumptions, users, workflows and decisions."
+        "header": "Executive summary",
+        "content": "Heritage planners managed surveys and meetings with Traditional Owners across spreadsheets and separate tools, making schedule changes difficult to coordinate. This phase-one feasibility study explored a more connected workflow for creating schedules, tracking progress and managing changes.\n\nWorking with a senior designer over approximately ten weeks, I translated research findings into a Heritage Planner persona, built a small component library based on the existing interface and created a connected, high-fidelity Figma prototype covering twelve user stories.\n\nWe used the prototype in three usability sessions with four users to assess whether the workflow matched their mental models and whether they could find what they needed without guidance. We documented the research and recommended next steps in Confluence and prepared a detailed development handover in Figma, with further details left for the next phase."
       },
       {
-        "header": "My approach",
-        "content": "I proposed a collaborative Product Alignment Canvas as the project's shared source of truth. It remained in use throughout the engagement and helped users, stakeholders and the design team build a common understanding of the problem.\n\nTogether with the senior designer, I:\n\n- Joined user and stakeholder meetings and interviews.\n- Mapped the daily workflow and the end-to-end user flow.\n- Recorded assumptions, terminology, roles and product decisions in the alignment canvas.\n- Designed a usability testing approach and incorporated feedback into later iterations.\n\nThe senior designer primarily focused on the long-term planning experience. I focused on the short-term workflow: how users would interact with near term schedules, understand generated plans and complete operational tasks."
+        "header": "Background",
+        "content": "Before mining could begin in a new area, the business needed to understand its cultural significance and consult Traditional Owners, the Indigenous communities connected to the land. The Heritage Planning team organised the surveys and meetings needed to support this process, coordinating community availability, field teams and business deadlines.\n\nHowever, their schedules were spread across spreadsheets and separate planning tools. When priorities changed or urgent work arose, planners had to manually rearrange activities and update the same information in several places. This made it difficult to keep everyone working from the latest plan and understand how a delay in one activity would affect the work that followed."
       },
       {
-        "header": "Prototype delivery",
-        "content": "Using the senior designer's draft flow as the foundation, I applied my Figma expertise to create the interactive draft prototype for 12 user stories.\n\nThe prototype helped the team move from abstract requirements to a shared experience that users and stakeholders could evaluate. Three usability sessions were completed with users, and the final design was prepared for engineering handover."
+        "header": "The challenge",
+        "content": "Before the project began, the senior designer and I met to build a shared understanding of the project, agree how we would work together and discuss potential risks. Three challenges shaped our approach.\n\n**Learning an unfamiliar domain**\n\nHeritage planning was new to both of us. We needed to piece together information from technical documents and stakeholder conversations to understand the roles, decisions and scheduling rules before translating them into a design.\n\n**Making a complex workflow easy to follow**\n\nThe workflow connected long-term plans with day-to-day scheduling, balancing community availability, field teams and activities that depended on one another. We needed to make these relationships easy to follow so planners could review generated schedules and adjust them when priorities changed.\n\n**Delivering within a short timeframe**\n\nWe had approximately ten weeks to learn the domain, design and test the workflow, and prepare the engineering handover. With twelve user stories forming one connected experience, we needed to resolve key questions quickly while leaving time for testing and refinement."
       },
       {
-        "header": "Outcome",
-        "content": "- The Product Alignment Canvas became a persistent source of truth throughout the project.\n- Twelve user stories were translated into an integrated interactive experience.\n- Three usability sessions with four users informed refinement of the workflow.\n- The team completed a clear design handover for implementation."
+        "header": "Research",
+        "content": "The kickoff established the scope and key objectives. To understand how the work happened in practice, we interviewed stakeholders and users across the long-term and short-term planning teams.\n\nWe captured what we learned in a shared alignment canvas, where everyone could review, comment and clarify assumptions. This helped us build a common understanding and keep a record of decisions. We then mapped separate workflows for each planning team and ran a few user sessions to validate them, helping us check our understanding early.\n\nAcross both teams, recurring pain points centred on complex scheduling tools, limited visibility of progress and time-consuming manual coordination. We grouped these findings into themes and used them to frame our design question:\n\n**How might we help heritage planners and schedulers create reliable schedules, track work progress and coordinate changes across teams with less manual effort?**"
+      },
+      {
+        "header": "Define",
+        "content": "I brought the research findings together into a Heritage Planner persona, capturing users’ goals, responsibilities and pain points in one shared reference. We used this persona to define user needs, translate them into user stories and identify features to support the planning workflow.\n\nKey user needs included:\n\n- Import and edit existing Excel plans without re-entering planning data.\n- Create new plans from saved configurations to reduce repeated setup.\n- Create and manage configurations in one place, with changes applied automatically wherever they are used.\n- View and adjust schedules on a clear timeline, with visibility of dependencies and the impact of changes.\n- Track completed, partially completed and outstanding work, and identify activities at risk.\n- Control who can view or edit planning information."
+      },
+      {
+        "header": "Design",
+        "content": "Design took up most of our time. We needed to introduce the workflow into an existing application, but only had access to a limited set of design files. This meant recreating the relevant UI and user flows to keep the new experience consistent with the existing product.\n\nOnce we had defined the user journey, the senior designer and I divided the work around our strengths. The senior designer focused on detailing the user stories, while I built a small component library based on the existing interface. I then used these components to turn the stories into a connected, high-fidelity interactive prototype."
+      },
+      {
+        "header": "Testing",
+        "content": "I created a high-fidelity prototype in Figma, which we used in three usability sessions with four users. The main goal was to understand whether the workflow matched users’ mental models and whether they could find what they needed and complete key tasks without guidance. The sessions covered the following testing goals.",
+        "table": {
+          "headers": ["Testing goal", "Task", "Evaluate", "Result"],
+          "rows": [
+            [
+              "**Find and start the planning workflow**",
+              "You need to prepare a heritage schedule. Create a new plan or upload an existing Excel plan.",
+              "Can users find the correct entry point and complete setup without help? Record incorrect selections and backtracking.",
+              "**4/4 completed independently.** All participants found the entry point and completed setup without difficulty."
+            ],
+            [
+              "**Understand and manage shared configurations**",
+              "A scheduling rule has changed. Find the relevant configuration, update the rule and save your changes.",
+              "Can users locate and edit the configuration? Can they explain where the updated rule will apply?",
+              "**3/4 completed independently.** One participant needed clarification about whether the change applied to one plan or every plan using that configuration."
+            ],
+            [
+              "**Understand the schedule and work status**",
+              "A colleague asks about an upcoming survey. Find it on the timeline and check its dates, dependencies and current status.",
+              "Can users locate the survey and interpret its details correctly? Record misunderstood labels or indicators.",
+              "**3/4 interpreted all details correctly.** All participants found the survey, but one confused the partially completed status with completed."
+            ],
+            [
+              "**Adjust plans when circumstances change**",
+              "A survey has been delayed. Reschedule it and review which following activities are affected.",
+              "Can users change the schedule, identify affected activities and recognise that their changes have been saved?",
+              "**3/4 completed independently.** One participant changed the survey date but needed prompting to review the affected activities. Two wanted clearer confirmation that their changes had been saved."
+            ]
+          ]
+        }
+      },
+      {
+        "header": "Next steps",
+        "content": "There are still many details to resolve, and the scope of this phase-one feasibility study meant we could not explore every scenario.\n\nWe wrapped up by documenting the full research process and recommended next steps in Confluence, and preparing a detailed development handover in Figma. These materials gave the team a shared record of our findings and designs to build on in the next phase."
       },
       {
         "header": "Reflection",

@@ -7,6 +7,7 @@ import projects from './data/projects.json';
 import { CapsuleNav } from './CapsuleNav';
 import { ExpertiseTabs } from './ExpertiseTabs';
 import { ReadingProgress } from './ReadingProgress';
+import { usePersonaColumns } from './usePersonaColumns';
 
 const email = 'ellenwang918@gmail.com';
 const assetUrl = (path: string) => `${import.meta.env.BASE_URL}${path.replace(/^\//, '')}`;
@@ -17,6 +18,7 @@ const projectUrl = (id: ProjectId) => `${import.meta.env.BASE_URL}work/${id}`;
 type InlineAccentProps = { tone: 'cyan' | 'lime' | 'yellow'; Icon: PhosphorIcon; className?: string };
 type ProjectArtworkProps = { index: number; className?: string };
 type ProjectCardProps = { index: number };
+type StorySection = { header: string; content: string; table?: { headers: string[]; rows: string[][] } };
 
 const socials = [
   { label: 'LinkedIn', url: 'https://www.linkedin.com/in/zi-wang-456923171/', Icon: LinkedinLogo },
@@ -68,6 +70,9 @@ function SolverCover({ className = '', loading = 'lazy' }: { className?: string;
 function ProjectArtwork({ index, className = '' }: ProjectArtworkProps) {
   if (projects[index].id === 'design-system-palms') return <PalmsMotionCover className={`artwork artwork-${index} ${className}`} />;
   if (projects[index].id === 'feature-improvement-sps') return <SolverCover className={`artwork artwork-${index} ${className}`} />;
+  if (projects[index].id === 'rapid-discovery-ism') return <div className={`artwork artwork-${index} heritage-preview ${className}`}>
+    <img className="editorial-art" src={assetUrl(projects[index].hero.src)} alt={projects[index].hero.alt} width={1672} height={941} loading="lazy" />
+  </div>;
   return <div className={`artwork artwork-${index} ${className}`}>
     <span className="artwork-label" aria-hidden="true">{outcomes[index].category}</span>
     <img className="editorial-art" src={assetUrl(projects[index].hero.src)} alt={projects[index].hero.alt} loading="lazy" />
@@ -189,7 +194,7 @@ function ApproachCards({ content, results }: { content: string; results: string[
     </li>;
   })}</ol></>;
 }
-function KaizenVideo() {
+function StoryVideo({ src, label }: { src: string; label: string }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(false);
   const play = () => { void videoRef.current?.play().catch(() => setPlaying(false)); };
@@ -203,9 +208,9 @@ function KaizenVideo() {
     play();
   };
   return <div className="story-video-player">
-    <video ref={videoRef} className="story-video" autoPlay muted loop playsInline preload="metadata" aria-label="Kaizen task interaction demo" onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)} onEnded={() => setPlaying(false)}>
-      <source src={assetUrl('/assets/kaizen-task-click-demo-v1.mp4')} type="video/mp4" />
-      Your browser does not support embedded video. <a href={assetUrl('/assets/kaizen-task-click-demo-v1.mp4')}>Watch the Kaizen task interaction demo</a>.
+    <video ref={videoRef} className="story-video" autoPlay muted loop playsInline preload="metadata" aria-label={label} onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)} onEnded={() => setPlaying(false)}>
+      <source src={assetUrl(src)} type="video/mp4" />
+      Your browser does not support embedded video. <a href={assetUrl(src)}>Watch {label}</a>.
     </video>
     <div className="story-video-controls" role="group" aria-label="Video playback">
       <button type="button" aria-label={playing ? 'Pause video' : 'Play video'} title={playing ? 'Pause' : 'Play'} onClick={togglePlayback}>{playing ? <Pause size={16} weight="fill" aria-hidden="true" /> : <Play size={16} weight="fill" aria-hidden="true" />}</button>
@@ -222,10 +227,22 @@ function SolverApproach({ content }: { content: string }) {
     return <li key={i}><strong>{title.replace(/^\*\*|\*\*$/g, '')}</strong><p>{description.join(' ')}</p></li>;
   })}</ol><div className="approach-layout"><div className="approach-narrative"><StoryContent content={introduction} /></div><img className="story-image solver-research-plan" src={assetUrl('/assets/solver-kaizen-research-plan.png')} alt="Kaizen concept research plan showing objectives, methodology, participants and questions across preparation, event and follow up phases, with sensitive details blurred." width={1727} height={911} loading="lazy" /></div></div>;
 }
+function StoryTable({ headers, rows, label }: { headers: string[]; rows: string[][]; label: string }) {
+  return <div className="story-table-scroll" role="region" aria-label={`${label} table, scroll horizontally to view all columns`} tabIndex={0}>
+    <table className="story-table" aria-label={label}>
+      <thead><tr>{headers.map(header => <th scope="col" key={header}>{header}</th>)}</tr></thead>
+      <tbody>{rows.map(([goal, ...cells]) => <tr key={goal}>
+        <th scope="row"><InlineText text={goal} /></th>
+        {cells.map((cell, index) => <td key={index}><InlineText text={cell} /></td>)}
+      </tr>)}</tbody>
+    </table>
+  </div>;
+}
 function StoryContent({ content, showPalmsComparison = false }: { content: string; showPalmsComparison?: boolean }) {
   return content.split(/\n\s*\n/).filter(Boolean).map((block, i) => {
     if (block.startsWith('### ')) return <h3 className="story-subheading" key={i}><InlineText text={block.slice(4)} /></h3>;
-    if (block.startsWith('**How might we help teams keep design and implementation aligned as PALMS grows,')) return <blockquote className="palms-problem-quote" key={i}><p>{block.slice(2, -2)}</p></blockquote>;
+    if (block.startsWith('**How might we ') && block.endsWith('**')) return <blockquote className="palms-problem-quote" key={i}><p>{block.slice(2, -2)}</p></blockquote>;
+    if (/^\*[^*]+\*$/.test(block)) return <p key={i}><em>{block.slice(1, -1)}</em></p>;
     const lines = block.split('\n');
     if (lines.every(line => /^- /.test(line))) return <ul key={i}>{lines.map((line, j) => <li key={j}><InlineText text={line.slice(2)} /></li>)}</ul>;
     if (lines.every(line => /^\d+\. /.test(line))) return <ol key={i}>{lines.map((line, j) => <li key={j}><InlineText text={line.replace(/^\d+\. /, '')} /></li>)}</ol>;
@@ -234,9 +251,10 @@ function StoryContent({ content, showPalmsComparison = false }: { content: strin
 }
 function CaseStudy({ id }: { id: ProjectId }) {
   const articleRef = useRef<HTMLElement>(null);
+  const defineLayoutRef = usePersonaColumns(id === 'rapid-discovery-ism');
   const index = projects.findIndex(p => p.id === id), project = projects[index];
   const previousProject = projects[index - 1], nextProject = projects[index + 1];
-  const sections = project.story.filter(section => section.content || section.header === 'Solution');
+  const sections: StorySection[] = project.story.filter(section => section.content || section.header === 'Solution' || (id === 'rapid-discovery-ism' && ['Research', 'Define', 'Design'].includes(section.header)));
   return <main id="main" className="case-page">
     <ReadingProgress key={id} articleRef={articleRef} />
     <div className="case-container container">
@@ -257,7 +275,7 @@ function CaseStudy({ id }: { id: ProjectId }) {
         </div>
       </aside>
       <article id="case-article" className="case-content" ref={articleRef}>
-        {id === 'design-system-palms' ? <PalmsMotionCover className="case-editorial" controls /> : id === 'feature-improvement-sps' ? <SolverCover className="case-editorial" loading="eager" /> : <img className="case-editorial" src={assetUrl(project.hero.src)} alt={project.hero.alt} />}
+        {id === 'design-system-palms' ? <PalmsMotionCover className="case-editorial" controls /> : id === 'feature-improvement-sps' ? <SolverCover className="case-editorial" loading="eager" /> : id === 'rapid-discovery-ism' ? <img className="case-editorial heritage-schedule-cover" src={assetUrl('/assets/heritage-schedule-cover-v1.png')} alt="Heritage Schedule, with a softly faded dotted double diamond on a pale warm-grey background" width={1672} height={941} fetchPriority="high" /> : <img className="case-editorial" src={assetUrl(project.hero.src)} alt={project.hero.alt} />}
         <div className="case-copy"><div className="project-tags">{project.tags.map(tag => <span className="badge" key={tag}>{tag}</span>)}</div><h1 id="case-title">{project.title}</h1><p className="case-summary">{project.summary}</p><dl className="case-metadata">{project.metadata.map(m => <div key={m.label}><dt className="mono">{m.label}</dt><dd>{m.value}</dd></div>)}</dl>
     {sections.map((section, i) => <section className={`story-section ${id === 'design-system-palms' && section.header === 'Background' ? 'palms-background' : id === 'design-system-palms' && section.header === 'My approach' ? 'palms-approach' : ''}`} id={`case-section-${i}`} key={section.header}>
       <div className="story-heading"><span className="mono">0{i + 1}</span><h2>{section.header}</h2></div>
@@ -266,8 +284,13 @@ function CaseStudy({ id }: { id: ProjectId }) {
         : id === 'feature-improvement-sps' && section.header === 'Background' ? <div className="solver-background-grid"><div><StoryContent content={section.content} /></div><img src={assetUrl('/assets/solver-kaizen-wireframe.png')} alt="Simplified Solver Kaizen wireframe showing search, filters and a list of improvements with status, lead, sponsor, site and creation date. Content is anonymised." width={1586} height={992} loading="lazy" /></div>
         : id === 'feature-improvement-sps' && section.header === 'Approach' ? <SolverApproach content={section.content} />
         : id === 'feature-improvement-sps' && section.header === 'Solution' ? <><StoryContent content={section.content} /><img className="story-image solver-solution-workflow" src={assetUrl('/assets/solver-kaizen-solution-workflow.png')} alt="Five stages of the Kaizen workflow: prepare charter, sponsor approval, run event, follow up actions, and complete and share." width={2055} height={765} loading="lazy" /></>
-        : id === 'feature-improvement-sps' && section.header === 'My contribution' ? <><StoryContent content={section.content} /><KaizenVideo /></>
+        : id === 'feature-improvement-sps' && section.header === 'My contribution' ? <><StoryContent content={section.content} /><StoryVideo src="/assets/kaizen-task-click-demo-v1.mp4" label="Kaizen task interaction demo" /></>
+        : id === 'rapid-discovery-ism' && section.header === 'Executive summary' ? <><StoryContent content={section.content} /><StoryVideo src="/assets/heritage-schedule-flow-v2.mp4" label="Heritage Schedule: log in, open Annual baseline and explore the Gantt chart and configuration" /></>
+        : id === 'rapid-discovery-ism' && section.header === 'Research' ? <><StoryContent content={section.content} /><figure className="ism-research-figure"><img className="story-image ism-research-canvas" src={assetUrl('/assets/ism-alignment-canvas-v2.png')} alt="Eight-section alignment canvas covering the problem, customer, current state, vision, priorities, deliverables, risks and next steps. Sticky-note answers and embedded images are blurred." width={1953} height={805} loading="lazy" /><figcaption>Product Alignment Canvas</figcaption></figure></>
+        : id === 'rapid-discovery-ism' && section.header === 'Define' ? <div className="ism-define-layout" ref={defineLayoutRef}><div className="ism-define-copy"><StoryContent content={section.content} /></div><figure className="ism-persona-figure"><a href={assetUrl('/assets/planner_persona.png')} target="_blank" rel="noreferrer" aria-label="View full-size Heritage Planner persona"><img className="story-image ism-persona-image" src={assetUrl('/assets/planner_persona.png')} alt="Illustrative Heritage Planner persona wearing a safety helmet. Goals focus on keeping activities on track, coordinating changes and identifying at-risk work. Needs include current work requests, reliable schedules and clear handovers; pains include slow macros, manual rescheduling and fragmented data." width={752} height={1084} loading="lazy" /></a><figcaption>Heritage Planner persona</figcaption></figure></div>
+        : id === 'rapid-discovery-ism' && section.header === 'Design' ? <><StoryContent content={section.content} /><a className="ism-prototype-link" href={assetUrl('/assets/configuration-update-prototype-flow-v5-horizontal.png')} target="_blank" rel="noreferrer" aria-label="View full-size configuration update prototype flow"><img className="story-image ism-prototype-flow" src={assetUrl('/assets/configuration-update-prototype-flow-v5-horizontal.png')} alt="Configuration update prototype flow: find the configuration, edit configuration, review changes and configuration updated, with supporting paths for invalid or missing fields and cancelling unsaved changes. Illustrative interaction with fictional content." width={2172} height={724} loading="lazy" /></a></>
         : <StoryContent content={section.content} />}
+      {section.table && <StoryTable headers={section.table.headers} rows={section.table.rows} label={section.header} />}
       {index === 0 && section.header === 'Outcome' && <div className="case-gallery"><figure><img src={assetUrl('/assets/Group%2014.svg')} alt="Illustrative design system foundations" loading="lazy" /><figcaption>Design system foundations</figcaption></figure></div>}
     </section>)}
     <p className="confidential-note">Some details and original project visuals are confidential. The images shown are illustrative mock-ups created for public viewing and do not represent the actual work. You’re welcome to <a href={`mailto:${email}`}>email me</a> for a chat.</p>
