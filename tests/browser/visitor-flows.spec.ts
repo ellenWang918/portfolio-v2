@@ -43,20 +43,25 @@ test('Work, next project, Home and browser history remain connected', async ({ p
 
 test('About tabs support keyboard selection', async ({ page }) => {
   await page.goto('./#about');
-  const about = page.getByRole('tab', { name: 'About me', exact: true });
-  await expect(about).toHaveAttribute('aria-selected', 'true');
-  await about.focus();
-  await about.press('ArrowRight');
-  const systems = page.getByRole('tab', { name: 'Design system', exact: true });
-  await expect(systems).toBeFocused();
-  await expect(systems).toHaveAttribute('aria-selected', 'true');
-  await expect(page.getByRole('tabpanel')).toContainText('Build clarity that scales.');
-  await systems.press('End');
-  const product = page.getByRole('tab', { name: 'Product', exact: true });
-  await expect(product).toBeFocused();
-  await expect(page.getByRole('tabpanel')).toContainText('Make complexity usable.');
-  await product.press('Home');
-  await expect(about).toBeFocused();
+  const professional = page.getByRole('tab', { name: 'Professional', exact: true });
+  const leisure = page.getByRole('tab', { name: 'Leisure', exact: true });
+  await expect(page.getByRole('tab')).toHaveCount(2);
+  await expect(professional).toHaveAttribute('aria-selected', 'true');
+  await professional.focus();
+  await professional.press('ArrowRight');
+  await expect(leisure).toBeFocused();
+  await expect(leisure).toHaveAttribute('aria-selected', 'true');
+  await expect(professional).toHaveAttribute('aria-selected', 'false');
+  await expect(page.getByRole('tabpanel')).toContainText('Love nature.');
+  await leisure.press('ArrowRight');
+  await expect(professional).toBeFocused();
+  await expect(professional).toHaveAttribute('aria-selected', 'true');
+  await professional.press('End');
+  await expect(leisure).toBeFocused();
+  await expect(leisure).toHaveAttribute('aria-selected', 'true');
+  await leisure.press('Home');
+  await expect(professional).toBeFocused();
+  await expect(professional).toHaveAttribute('aria-selected', 'true');
   await expect(page.getByRole('tabpanel')).toContainText('Curious by nature.');
 });
 
