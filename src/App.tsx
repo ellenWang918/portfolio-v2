@@ -2,12 +2,13 @@ import { Fragment, useEffect, useId, useLayoutEffect, useRef, useState } from 'r
 import { createPortal } from 'react-dom';
 
 import type { Icon as PhosphorIcon } from '@phosphor-icons/react';
-import { Eye, Stack, Sparkle, MapPin, Sun, Moon, EnvelopeSimple, LinkedinLogo, GithubLogo, Compass, GridFour, Check, Copy, CaretLeft, CaretRight, CaretUp, ArrowRight, ArrowLeft, Pause, Play, ArrowCounterClockwise } from '@phosphor-icons/react';
+import { Eye, Heart, Paperclip, X, Stack, Sparkle, MapPin, Sun, Moon, EnvelopeSimple, LinkedinLogo, GithubLogo, Check, Copy, CaretLeft, CaretRight, CaretUp, ArrowRight, ArrowLeft, Pause, Play, ArrowCounterClockwise } from '@phosphor-icons/react';
 import projects from './data/projects.json';
 import { CapsuleNav } from './CapsuleNav';
 import { ExpertiseTabs } from './ExpertiseTabs';
 import { ReadingProgress } from './ReadingProgress';
 import { usePersonaColumns } from './usePersonaColumns';
+import { useHangingLine } from './useHangingLine';
 
 const email = 'ellenwang918@gmail.com';
 const assetUrl = (path: string) => `${import.meta.env.BASE_URL}${path.replace(/^\//, '')}`;
@@ -31,12 +32,75 @@ const outcomes = [
   { value: '12', label: 'user stories prototyped', short: 'From complex requirements to a testable experience.', category: 'Discovery & prototyping' },
   { value: '16', label: 'interviews across 8 groups', short: 'Connecting people, processes & systems.', category: 'Service design' },
 ];
-const expertise = [
-  { name: 'Design system', Icon: GridFour, title: 'Build clarity that scales.', text: 'A design system connects components, people and delivery practices. I create reusable foundations, practical documentation and shared workflows to keep design and development aligned.', skills: ['Design systems', 'Documentation', 'Design governance'], project: 0 },
-  { name: 'Product', Icon: Compass, title: 'Make complexity usable.', text: 'I turn complex workflows into clear interactions and testable prototypes. Working closely with engineering, I balance user needs with technical feasibility to shape an achievable first release.', skills: ['Product strategy', 'Interaction design', 'Prototyping'], project: 2 },
-];
 function InlineAccent({ tone, Icon, className = '' }: InlineAccentProps) {
   return <span className={`inline-accent accent-${tone} ${className}`} aria-hidden="true"><Icon weight="bold" /></span>;
+}
+function LeisureCollage() {
+  const galleryRef = useHangingLine();
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const isOpen = selectedIndex !== null;
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+    if (!isOpen) {
+      if (dialog.open) dialog.close();
+      return;
+    }
+    if (!dialog.open) dialog.showModal();
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = previousOverflow; };
+  }, [isOpen]);
+  const lines = [
+    [
+      { src: 'photo-01.webp', alt: 'A selfie with a cat', width: 1050, height: 1400 },
+      { src: 'photo-03.webp', alt: 'A group selfie with friends', width: 1400, height: 1050 },
+      { src: 'photo-07.webp', alt: 'A smiling selfie with a pink and grey bird perched on my head', width: 787, height: 1400 },
+      { src: 'photo-06.webp', alt: 'Looking up at a circular skylight beside a colourful orange wall', width: 787, height: 1400 },
+    ],
+    [
+      { src: 'photo-04.webp', alt: 'A sunny walk with a dog beneath palm trees', width: 1050, height: 1400 },
+      { src: 'photo-05.webp', alt: 'Birds resting on a wooden jetty beside the water', width: 788, height: 1400 },
+      { src: 'photo-02.webp', alt: 'Sharing a sunny afternoon with friends', width: 1400, height: 1050 },
+    ],
+  ];
+  const photos = lines.flat();
+  const currentPhoto = selectedIndex === null ? null : photos[selectedIndex];
+  const navigatePhoto = (direction: number) => setSelectedIndex(current => current === null ? null : (current + direction + photos.length) % photos.length);
+  return <><div ref={galleryRef} className="leisure-collage hanging-gallery" role="group" aria-label="Hanging photos of friends, animals and places I love">
+    <canvas className="hanging-connector" aria-hidden="true" />
+    {lines.map((rowPhotos, index) => <div className="hanging-row" key={index}>
+      {rowPhotos.map(photo => <button type="button" className="hanging-photo" key={photo.src} aria-haspopup="dialog" onClick={() => setSelectedIndex(photos.indexOf(photo))} aria-label={`View full photo: ${photo.alt}`}>
+        <span className="hanging-swing">
+          <Paperclip className="hanging-clip" weight="light" aria-hidden="true" />
+          <span className="hanging-frame"><img src={assetUrl(`/assets/leisure/${photo.src}`)} alt={photo.alt} width={photo.width} height={photo.height} loading="lazy" decoding="async" /></span>
+        </span>
+      </button>)}
+    </div>)}
+  </div><dialog ref={dialogRef} className="leisure-lightbox" aria-label="Leisure photo viewer" onCancel={() => setSelectedIndex(null)} onClose={() => setSelectedIndex(null)} onClick={event => {
+    if (event.target !== event.currentTarget) return;
+    const bounds = event.currentTarget.getBoundingClientRect();
+    if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) setSelectedIndex(null);
+  }} onKeyDown={event => {
+    if (event.key === 'Tab') {
+      const buttons = event.currentTarget.querySelectorAll<HTMLButtonElement>('button');
+      const first = buttons[0], last = buttons[buttons.length - 1];
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+    }
+    if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+      event.preventDefault();
+      navigatePhoto(event.key === 'ArrowLeft' ? -1 : 1);
+    }
+  }}>
+    {currentPhoto && <>
+      <button type="button" className="photo-viewer-control photo-viewer-close" aria-label="Close photo viewer" onClick={() => setSelectedIndex(null)}><X size={22} aria-hidden="true" /></button>
+      <button type="button" className="photo-viewer-control photo-viewer-previous" aria-label="Previous photo" onClick={() => navigatePhoto(-1)}><CaretLeft size={26} aria-hidden="true" /></button>
+      <figure className="photo-viewer-figure"><img src={assetUrl(`/assets/leisure/${currentPhoto.src}`)} alt={currentPhoto.alt} width={currentPhoto.width} height={currentPhoto.height} /><figcaption aria-live="polite" aria-atomic="true">Photo {(selectedIndex ?? 0) + 1} of {photos.length}</figcaption></figure>
+      <button type="button" className="photo-viewer-control photo-viewer-next" aria-label="Next photo" onClick={() => navigatePhoto(1)}><CaretRight size={26} aria-hidden="true" /></button>
+    </>}
+  </dialog></>;
 }
 function ComplexityScribble() {
   return <span className="inline-accent accent-cyan complexity-scribble" aria-hidden="true">
@@ -338,21 +402,20 @@ export function App() {
   }, []);
   useEffect(() => () => clearTimeout(copyTimeout.current), []);
   async function copyEmail() { try { await navigator.clipboard.writeText(email); setCopied(true); clearTimeout(copyTimeout.current); copyTimeout.current = window.setTimeout(() => setCopied(false), 2500); } catch { window.location.href = `mailto:${email}`; } }
-  const aboutTabs = [{ name: 'About me' }, ...expertise];
-  const currentExpertise = expertise[Math.max(0, activeTab - 1)], ExpertiseIcon = currentExpertise.Icon;
+  const aboutTabs = [{ name: 'Professional' }, { name: 'Leisure' }];
   return <>
     <a className="skip-link" href="#main">Skip to content</a>
     <header className="site-header"><a className="brand" href={`${import.meta.env.BASE_URL}#home`} aria-label="Ellen Wang, home"><img src={assetUrl('/assets/logo_in_circle.svg')} alt="" width="32" height="32" /><span>Ellen Wang<span className="brand-period">.</span></span></a><div className="header-right"><span className="availability"><span className="availability-dot" aria-hidden="true" />Available for work</span><button className="icon-button theme-toggle" aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`} onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>{theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}</button></div></header>
     {projectId ? <CaseStudy id={projectId} /> : <>
     <CapsuleNav activeSection={activeSection} />
     <main id="main">
-      <section className="hero" id="home" aria-labelledby="hero-title"><div className="container"><p className="eyebrow"><span className="intro-wave" aria-hidden="true">👋</span> HI, I’M ELLEN WANG</p><h1 id="hero-title">I turn <ComplexityScribble /> <span className="hero-ambiguity">ambiguity</span><br className="desktop-break" /> into <InlineAccent tone="lime" Icon={Stack} /> clarity<span className="hero-dot">.</span> <InlineAccent tone="yellow" Icon={Sparkle} className="sparkle-accent" /></h1><div className="hero-bottom"><p>Product designer with a technical background.<br />Making complex digital products feel human.</p><div className="hero-actions"><a className="button" href="#contact">Get in touch</a><a className="button button-white" href="#work">Explore my work</a></div></div></div></section>
+      <section className="hero" id="home" aria-labelledby="hero-title"><div className="container"><p className="eyebrow"><span className="intro-wave" aria-hidden="true">👋</span> HI, I’M ELLEN WANG</p><h1 id="hero-title" aria-label="I turn ambiguity into clarity."><span className="hero-line hero-line-ambiguity">I turn <ComplexityScribble /> <span className="hero-ambiguity">ambiguity</span></span>{' '}<span className="hero-line hero-line-clarity">into <InlineAccent tone="lime" Icon={Stack} className="hero-layers-accent" /> clarity<span className="hero-dot">.</span> <InlineAccent tone="yellow" Icon={Sparkle} className="sparkle-accent" /></span></h1><div className="hero-bottom"><p>Product designer with a technical background.<br />Making complex digital products feel human.</p><div className="hero-actions"><a className="button" href="#contact">Get in touch</a><a className="button button-white" href="#work">Explore my work</a></div></div></div></section>
       <section className="project-reel" aria-label="Project preview gallery"><div className="reel-track">{[0, 1].map(group => <div className="reel-group" key={group} aria-hidden={group === 1 ? 'true' : undefined}>{projects.map((p, index) => <a className="reel-card" key={p.id} tabIndex={group === 1 ? -1 : 0} href={projectUrl(p.id)} aria-label={`Preview ${p.title}`}><ProjectArtwork index={index} /><span className="reel-caption">{p.folderTitle}</span></a>)}</div>)}</div></section>
-      <section className="expertise-section container" id="about" aria-labelledby="expertise-title"><div className="expertise-card"><div className="expertise-top"><div><h2 id="expertise-title">About Ellen <InlineAccent tone="cyan" Icon={Eye} /></h2></div><ExpertiseTabs items={aboutTabs} activeTab={activeTab} onChange={setActiveTab} /></div><div id="expertise-panel" className={`expertise-panel ${activeTab === 0 ? 'about-me-panel' : ''}`} role="tabpanel" aria-labelledby={`expertise-tab-${activeTab}`} tabIndex={0}>{activeTab === 0 ? <div className="about-me-content"><div className="about-layout"><div className="about-title"><h2 id="about-title">Curious by nature.<br />Practical by design.</h2><div className="about-signature"><img src={assetUrl('/assets/logo_in_circle.svg')} alt="" width="64" height="64" /><span>Ellen Wang<br /><span className="muted">Product designer</span></span></div></div><div className="about-copy"><p className="about-lead">I’m a product designer with a technical background, specialising in complex digital products.</p><p>I work across research, product strategy, interaction design and design systems to turn complex workflows into scalable experiences that users and engineering teams can understand.</p><p className="about-location"><MapPin size={20} /> Based on the Gold Coast, Australia.</p><div className="about-links">{socials.slice(0, 2).map(({ label, url, Icon }) => <a key={label} href={url} target="_blank" rel="noreferrer"><Icon size={20} />{label}</a>)}</div></div></div><div className="principle-row"><span>People first.</span><span>Clarity always.</span><span>Built together.</span></div></div> : <><div className="expertise-copy" key={activeTab}><ExpertiseIcon size={32} weight="regular" /><h3>{currentExpertise.title}</h3><p>{currentExpertise.text}</p><div className="project-tags">{currentExpertise.skills.map(skill => <span className="badge" key={skill}>{skill}</span>)}</div><a className="text-button" href={projectUrl(projects[currentExpertise.project].id)}><span className="text-button-label">Explore a related project</span><ArrowRight size={16} aria-hidden="true" /></a></div><div className={`expertise-art expertise-art-${activeTab}`} aria-hidden="true"><div className="fan-card fan-back"><ProjectArtwork index={(currentExpertise.project + 1) % projects.length} /></div><div className="fan-card fan-front"><ProjectArtwork index={currentExpertise.project} /></div></div></>}</div></div></section>
+      <section className="expertise-section container" id="about" aria-labelledby="expertise-title"><div className="expertise-card"><div className="expertise-top"><div><h2 id="expertise-title">About Ellen {activeTab === 1 ? <span className="inline-accent leisure-accent" aria-hidden="true"><Heart weight="bold" /></span> : <InlineAccent tone="cyan" Icon={Eye} />}</h2></div><ExpertiseTabs items={aboutTabs} activeTab={activeTab} onChange={setActiveTab} /></div><div id="expertise-panel" className="expertise-panel about-me-panel" role="tabpanel" aria-labelledby={`expertise-tab-${activeTab}`} tabIndex={0}>{activeTab === 0 ? <div className="about-me-content"><div className="about-layout"><div className="about-title"><h2 id="about-title">Curious by nature.<br />Practical by design.</h2><div className="about-signature"><img src={assetUrl('/assets/logo_in_circle.svg')} alt="" width="64" height="64" /><span>Ellen Wang<br /><span className="muted">Product designer | Design engineer | Specialty in Design system | Engineer background</span></span></div></div><div className="about-copy"><p className="about-lead">I’m a product designer with a technical background, specialising in complex digital products.</p><p>I work across research, product strategy, interaction design and design systems to turn complex workflows into scalable experiences that users and engineering teams can understand.</p><p className="about-location"><MapPin size={20} /> Based on the Gold Coast, Australia.</p><div className="about-links">{socials.slice(0, 2).map(({ label, url, Icon }) => <a key={label} href={url} target="_blank" rel="noreferrer"><Icon size={20} />{label}</a>)}</div></div></div><div className="principle-row"><span>People first.</span><span>Clarity always.</span><span>Built together.</span></div></div> : <div className="about-me-content"><div className="about-layout leisure-layout"><div className="leisure-content"><div className="about-title"><h2 className="about-lead">Love nature.<br />Love connection.</h2></div><div className="about-copy leisure-copy"><p>Outside of designing, I love travelling, taking photos and playing mahjong. <span className="leisure-sticker leisure-sticker-mahjong" aria-hidden="true"><img src={assetUrl('/assets/leisure/mahjong-emoji.svg')} alt="" width="20" height="20" /></span></p><p>I love all kinds of animals, especially cats. <span className="leisure-sticker leisure-sticker-cat" aria-hidden="true">🐱</span> I currently volunteer at <a href="https://friendsofthepound.com/" target="_blank" rel="noreferrer">Friends of the Pound</a>, caring for the little ones and helping them find their forever homes.</p><p>I also love meeting people and building connections whenever I can. Some of my former colleagues have become friends, and we catch up regularly over coffee. <span className="leisure-sticker leisure-sticker-coffee" aria-hidden="true"><img src={assetUrl('/assets/leisure/coffee-emoji.svg')} alt="" width="20" height="20" /></span></p></div></div><LeisureCollage /></div></div>}</div></div></section>
       <section className="work-section" id="work" aria-labelledby="work-title"><div className="container"><div className="section-heading"><div><h2 id="work-title">Selected work</h2></div></div><div className="work-grid">{projects.map((p, index) => <ProjectCard key={p.id} index={index} />)}</div></div></section>
-      <section className="contact-section container" id="contact" aria-labelledby="contact-title"><div className="contact-card"><h2 id="contact-title">Get in touch! <InlineAccent tone="yellow" Icon={Sparkle} /></h2><div className="contact-bottom"><p>Want to work together or have a question? Reach out, I'm always open for a chat.</p><a href={`mailto:${email}`} className="button button-white">Let’s talk <EnvelopeSimple size={18} /></a></div><div className="email-row"><a href={`mailto:${email}`}>{email}</a><button className="copy-button" aria-label={copied ? 'Email address copied' : 'Copy email address'} onClick={copyEmail}>{copied ? <Check size={18} /> : <Copy size={18} />}<span aria-live="polite">{copied ? 'Copied' : 'Copy'}</span></button></div></div></section>
+      <section className="contact-section container" id="contact" aria-labelledby="contact-title"><div className="contact-card"><h2 id="contact-title">Get in touch! <InlineAccent tone="yellow" Icon={Sparkle} /></h2><div className="contact-bottom"><p>Open to work now. Reach out if you wanna be friends or colleagues!</p><a href={`mailto:${email}`} className="button button-white">Let’s talk <EnvelopeSimple size={18} /></a></div><div className="email-row"><a href={`mailto:${email}`}>{email}</a><button className="copy-button" aria-label={copied ? 'Email address copied' : 'Copy email address'} onClick={copyEmail}>{copied ? <Check size={18} /> : <Copy size={18} />}<span aria-live="polite">{copied ? 'Copied' : 'Copy'}</span></button></div></div></section>
     </main>
-    <footer className="site-footer container"><span>© {new Date().getFullYear()} Ellen Wang</span><p>Made with care & a little curiosity.</p><div>{socials.map(({ label, url }) => <a key={label} href={url} target={label === 'Email' ? undefined : '_blank'} rel="noreferrer">{label}</a>)}</div><a className="back-top" href="#home" aria-label="Back to top"><CaretUp size={18} /></a></footer>
+    <footer className="site-footer container"><span>© {new Date().getFullYear()} Ellen Wang</span><p>Made with care & a little curiosity.</p><div>{socials.map(({ label, url }) => <a key={label} href={url} target={label === 'Email' ? undefined : '_blank'} rel="noreferrer">{label}</a>)}</div></footer>
     </>}
   </>;
 }
