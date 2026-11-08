@@ -231,16 +231,16 @@
   },
   {
     "id": "business-process-improvement-plm",
-    "title": "Service Design & Workflow Mapping",
-    "folderTitle": "Service Design",
+    "title": "Paperless Maintainer",
+    "folderTitle": "Paperless Maintainer",
     "folderArtwork": {
       "src": "/assets/service-design-drawing.svg",
-      "alt": "Service Design drawing"
+      "alt": "Paperless Maintainer drawing"
     },
     "summary": "A mobile maintenance product that digitises field workflows and connects with enterprise systems.",
     "hero": {
       "src": "/assets/service-design-editorial.svg",
-      "alt": "Service Design project hero"
+      "alt": "Paperless Maintainer project hero"
     },
     "tags": [
       "Service Design",
@@ -265,6 +265,18 @@
       {
         "header": "Overview",
         "content": "The existing product was an Android mobile based digitalised maintenance paperword application. It allowed field personnel to view digital work orders and attachments and record maintenance information that would traditionally be pure paper based and handled through a central enterprise asset management system. \n\nAlthough core maintenance activities had already been digitised, checklist related workflows remained fragmented across paper forms, digital PDF editor and specialised systems."
+      },
+      {
+        "header": "Background",
+        "content": "PLM’s Digital Checklist initiative aimed to improve how frontline maintainers and operators carried out inspections and recorded their findings. Existing paper checklists and annotated PDFs were difficult to complete, update, and review, while the information captured was often hard to access and reuse.\n\nBefore defining a solution, the team needed to understand how different business groups created, managed, completed, and used checklists. The research explored these workflows, tested stakeholder assumptions, and identified users’ needs and pain points. Its purpose was to give product and technical teams an evidence-based direction for the digital checklist solution."
+      },
+      {
+        "header": "Challenge",
+        "content": "Different business groups created, managed, and completed inspections in different ways. They used a mix of paper forms, annotated PDFs, and specialist tools, with varying requirements for approvals, data capture, and reporting.\n\nThe team lacked a clear understanding of this end-to-end process: who was involved, where problems occurred, and which needs were shared across groups. We needed to build that understanding before deciding what the digital checklist solution should support and where to focus first."
+      },
+      {
+        "header": "What we accomplished",
+        "content": "Through the discovery, we:\n\n- **Gathered evidence across the business:** conducted 16 interviews across eight business groups to understand their inspection workflows and needs.\n- **Identified four main problem areas:** checklist modification, reporting, interface usability, and training/work instructions.\n- **Made the findings actionable:** developed problem statements, documented shared and group-specific requirements, and presented the findings to support product and technical decisions.\n\nMy key contribution was **creating a service blueprint** that connected the team’s research findings into a complete view of the inspection process.\n\nI mapped frontline activities alongside the people, systems, and supporting processes behind them, from checklist creation and work assignment to completing inspections and storing results. This made fragmented workflows, manual handovers, and gaps in data capture visible in one place.\n\nThe blueprint brought individual pain points into context, giving the team a clearer view of where problems occurred and where improvements could be explored."
       },
       {
         "header": "Research",

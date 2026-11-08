@@ -232,3 +232,111 @@ Browser verification observed the first line arriving before the second after a 
 Evidence: .tools/hero-motion-desktop.png and .tools/hero-motion-mobile.png. Production build and strict TypeScript checks passed. Reduced-motion behavior is implemented via the explicit CSS media override; OS preference was not changed during verification.
 
 final result: passed
+
+---
+
+# PALMS Selected work hover
+
+final result: passed
+
+Scope: the approved darker background on the homepage PALMS card. Existing layout, typography, content, other artwork, carousel and case-study header remain the baseline.
+
+Source visual truth: C:/Users/woshi/.codex/generated_images/01a1b8b1-6aaa-73a1-bb02-ddea12c873c0/exec-008320f1-3d27-4bb0-a087-4451dd1fbb64.png
+
+Implementation screenshot: C:/Users/woshi/.codex/visualizations/2026/11/08/01a1b8b1-6aaa-73a1-bb02-ddea12c873c0/palms-work-hover-final.png
+
+Route: http://127.0.0.1:5174/#work
+
+Viewport: browser reports 1302 x 1291 CSS pixels; captured content is 1287 x 1276 pixels. Source is 1269 x 1240 pixels. Comparison uses corresponding Selected work regions at natural scale; generated-reference sizing drift is not adopted into the existing layout. No density resampling was used.
+
+State: desktop light theme, PALMS hovered and keyboard focus-visible. Source and implementation were opened together in the same comparison call. Full views clearly show both the PALMS artwork and neighbouring Solver card; no further detail crop was necessary for this background-only change.
+
+Findings: no actionable P0/P1/P2 issues remain.
+
+- Typography: existing fonts, title, sizes and wrapping retained; title stays crisp above the shading.
+- Spacing/layout: original staggered grid, card bounds, radii and metadata spacing retained. No horizontal overflow.
+- Colours: darker periwinkle treatment matches the approved direction while retaining the original moving blue layers and title contrast backdrop. Exact field positions vary with animation. The existing focus ring is intentionally retained for accessibility.
+- Asset fidelity: original motion artwork retained; no replacement raster or generated screenshot is shipped in the UI.
+- Copy: project title, tags, metadata, summary and actions unchanged.
+
+Comparison history:
+1. Initial black shade was too grey compared with the approved blue mockup (P2). Replaced it with a blue tint and strengthened it beneath the existing title backdrop.
+2. Final screenshot shows the richer blue hover treatment with readable title and unchanged adjacent artwork. Remaining gradient-field variation is expected from the existing animation.
+
+Validation: pointer hover and keyboard focus activate the shade; opacity returns to zero on exit. Browser error log is empty. Production build and strict type checking pass. Dark-theme shading, fine-pointer gating and reduced-motion transition removal were checked in the stylesheet; dark/mobile device rendering was not separately captured because this change adds no geometry and preserves existing responsive rules.
+
+Implementation checklist: complete. No follow-up polish required.
+
+---
+
+# Heritage Schedule typography and travelling shimmer
+
+final result: passed
+
+Source: public/assets/heritage-schedule-cover-v1.png (1672 x 941). Preserve its design; approved differences are Space Grotesk title typography and a single left-to-right shimmer on card hover/focus. Original asset retained.
+
+Implementation evidence in C:/Users/woshi/.codex/visualizations/2026/11/08/01a1b8b1-6aaa-73a1-bb02-ddea12c873c0/:
+- heritage-shimmer-desktop.png
+- heritage-shimmer-mobile.png
+- heritage-shimmer-dark-mobile.png
+- heritage-header-font.png
+
+Desktop browser viewport 1302 x 1291; captured content 1287 x 1276. Mobile override 390 x 844; captured content 375 x 829. Original and implementation were opened together, comparing corresponding artwork regions with the original full composition retained. No resampling or cropping was applied to shipped assets. Browser viewport and light theme restored afterward.
+
+Fidelity review: no actionable P0/P1/P2 findings. Pale warm-grey background, diamond geometry, faded dots and full artwork proportions retained. Title now uses the existing Space Grotesk display token, medium weight, centred and stationary. Card anatomy, metadata, copy and adjacent artwork remain unchanged. Desktop/mobile and dark-theme screenshots show no title clipping. Header remains static with square corners and the full intrinsic artwork. Focus ring is intentionally preserved.
+
+Interaction checks: keyboard entry activates heritage-travelling-shimmer at 1.2 seconds with iteration count 1. Immediate re-entry reports opacity 1 and a starting mask position; the settled state returns opacity 0. Fine-pointer hover uses the same animation declaration. Touch-only hover is excluded. Reduced-motion rules replace movement with static emphasis. No JavaScript event listeners or animation timers were added. Browser error log empty; production build and strict type checking pass. Reduced-motion and touch media rules were reviewed in CSS rather than device-emulated.
+
+Asset provenance: built-in image generation edited the original into public/assets/heritage-schedule-diamonds-v2.png. Prompt: remove only the central title, reconstruct the background and hidden dots, and preserve the original 1672 x 941 double-diamond framing, dot density, fades and warm-grey colours, with no text or new decoration. The live title is separate UI text so the real primary font renders consistently at every size.
+
+---
+
+# Heritage Schedule diamond-tracing video revision
+
+final result: passed
+
+Supersedes the previous straight shimmer. User requested a video in which the dots grow and fade along the double-diamond outline, resembling travelling lights that draw the shape.
+
+Output: public/assets/heritage-diamond-trail-v1.mp4, six seconds at 30fps, muted H.264, 746152 bytes. Source: the existing text-free diamond artwork. The renderer locates 1173 original dots and orders them by their nearest point on a continuous route around the left diamond, through the centre, then around the right diamond. It animates dot size, opacity and soft halos; no replacement diamond geometry is displayed. One bottom padding pixel makes the video codec dimensions even; object-fit cover retains the artwork bounds without stretching.
+
+Evidence: output/heritage-diamond-trail/frame-000.jpg, frame-030.jpg, frame-060.jpg, frame-090.jpg, frame-120.jpg, frame-150.jpg and frame-179.jpg. Live screenshot: C:/Users/woshi/.codex/visualizations/2026/11/08/01a1b8b1-6aaa-73a1-bb02-ddea12c873c0/heritage-dot-video-live.png. Desktop viewport remained the existing default, with 1287 x 1276 captured content pixels. Frames at one and four seconds show the pulse at different diamond corners, rather than a horizontal mask. The live capture shows the same travelling dots in the unchanged card beneath its stationary Space Grotesk title.
+
+No actionable P0/P1/P2 findings. Fonts, copy, card sizing and surrounding layouts remain unchanged. Original pale background and faded artwork return at the end. React listener cleanup pauses playback. Media stays decorative and hidden from assistive technology; parent links retain their accessible names. Reduced motion and touch-only pointer entry retain the static cover. Case-study cover stays static.
+
+Browser checks: pointer entry observed hovered=true, paused=false and time=0.23; keyboard focus observed paused=false, readyState=4, muted=true, loop=false. Completion observed time=6, ended=true, paused=true and opacity=0. Focus exit observed time=0, paused=true and opacity=0; re-entry restarted playback. Error log empty. Production build and strict type checking passed. Mobile geometry is unchanged from the preceding verified revision; this revision's additional checks focused on playback lifecycle.
+
+---
+
+# Heritage Schedule lighter, slower continuous loop
+
+final result: passed
+
+Supersedes the single-play dark trail above. User requested lighter dots, slower movement and continuous playback while hovered.
+
+Output: public/assets/heritage-diamond-trail-v2.mp4. Ten-second cycle at 30fps, using white dot highlights and white diffuse halos. Periodic path progress replaces the previous start/end fades so the trail continues through the loop boundary. The previous movie remains preserved. Native video looping is enabled; existing hover/focus exit still pauses playback, resets time and restores the static cover. Reduced-motion and touch-only behaviour remain static.
+
+Visual evidence: output/heritage-diamond-trail-v2/frame-050.jpg and C:/Users/woshi/.codex/visualizations/2026/11/08/01a1b8b1-6aaa-73a1-bb02-ddea12c873c0/heritage-light-loop-live.png. The original full diamond geometry, pale background, Space Grotesk title, layout and copy remain unchanged. The rendered and live samples show a white glow following the outline rather than the former dark pulse. No actionable P0/P1/P2 findings.
+
+Runtime validation: duration=10, loop=true, muted playback active. Over a measured 10.5-second interval, playback advanced from 4.488 to 4.999 seconds, confirming a complete wrap without stopping; paused=false, ended=false and opacity=1 afterward. Focus exit returned time=0, paused=true and opacity=0. Browser error log empty. Production build and strict type checking passed.
+
+---
+
+# Heritage Schedule size-only breathing revision
+
+final result: passed
+
+User rejected the light/colour treatment and requested local dot-size breathing (呼吸感). Output is public/assets/heritage-diamond-breathing-v3.mp4, retaining the existing ten-second hover/focus loop. The renderer extracts each original dot's grey ink and antialiased edges, then resizes a small moving cluster from its original size up to 122% and back with a cosine breathing curve. Colour, brightness and opacity are not animated; no halo or glow layers remain. Outside the local area the original artwork is unchanged. Earlier video versions are retained.
+
+Evidence: output/heritage-diamond-breathing-v3/frame-050.jpg and C:/Users/woshi/.codex/visualizations/2026/11/08/01a1b8b1-6aaa-73a1-bb02-ddea12c873c0/heritage-breathing-live.png. Original pale background, faded grey dots, typography and layout remain intact; no actionable P0/P1/P2 findings. The local size variation is intentionally restrained.
+
+Browser confirms the v3 video source, duration=10, loop=true, paused=false and time=1.8024 during focus playback. Browser errors empty. Strict type checking and production build passed. Playback lifecycle and responsive geometry reuse the previously verified component without behavioural changes.
+
+---
+
+# Heritage Schedule visible breathing amplitude
+
+final result: passed
+
+User found the previous 22% expansion invisible. New output: public/assets/heritage-diamond-breathing-v4.mp4. Increase local dot diameter range to 45–160% of original, with a wider spatial envelope (0.08 of the route instead of 0.045). Affected dots now contract as well as expand; their grey ink remains unchanged and no light, colour or opacity effect is introduced. The original ten-second loop, hover/focus lifecycle, static heading and reduced-motion fallback remain intact.
+
+Evidence: output/heritage-diamond-breathing-v4/frame-050.jpg and C:/Users/woshi/.codex/visualizations/2026/11/08/01a1b8b1-6aaa-73a1-bb02-ddea12c873c0/heritage-breathing-stronger-live.png. The peak area is broader and dot sizes are visibly enlarged in the upper-left diamond region while the right diamond retains its original scale. Browser confirms v4 source, loop=true, paused=false, currentTime=1.7552. No browser errors. Production build and strict type checking pass. No layout, copy or typography changes.

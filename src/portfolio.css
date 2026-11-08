@@ -136,6 +136,15 @@ h1, h2, h3 { font-family: var(--font-display); }
 .palms-motion-toggle { position: absolute; z-index: 2; right: 16px; bottom: 16px; display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: #ffffffd9; color: #123d7b; opacity: 0; transition: opacity 180ms ease; }
 .palms-motion-cover:hover .palms-motion-toggle, .palms-motion-cover:focus-within .palms-motion-toggle { opacity: 1; }
 .palms-motion-cover.is-paused .palms-motion-field, :is(.project-card, .reel-card):is(:hover, :focus-visible) .palms-motion-field { animation-play-state: paused; }
+.project-card .palms-motion-cover::after { content: ''; position: absolute; z-index: 0; inset: 0; background: var(--palms-hover-tint, #1836b5); opacity: 0; pointer-events: none; transition: opacity 240ms ease; }
+.project-card:focus-visible .palms-motion-cover::after { opacity: var(--palms-hover-shade, .45); }
+@media (hover: hover) and (pointer: fine) {
+  .project-card:hover .palms-motion-cover::after { opacity: var(--palms-hover-shade, .45); }
+}
+[data-theme='dark'] .project-card { --palms-hover-tint: #000; --palms-hover-shade: .16; }
+@media (prefers-reduced-motion: reduce) {
+  .project-card .palms-motion-cover::after { transition: none; }
+}
 [data-theme='dark'] .palms-motion-cover { background: #102c57; color: #fff; }
 [data-theme='dark'] .palms-motion-cover::before { opacity: .12; }
 [data-theme='dark'] .palms-motion-field { filter: brightness(.8); }
@@ -164,10 +173,23 @@ h1, h2, h3 { font-family: var(--font-display); }
 [data-theme='dark'] .solver-preview { background: #493236; }
 [data-theme='dark'] .solver-preview-screen { box-shadow: 0 10px 30px -8px #00000040; }
 .editorial-art { width: 100%; height: 100%; object-fit: cover; object-position: 85% center; mix-blend-mode: multiply; padding-top: 30px; transition: transform .4s; }
-.heritage-preview { background: #f6f4f1; }
-.heritage-preview .editorial-art { display: block; object-fit: contain; object-position: center; mix-blend-mode: normal; padding: 0; }
+.heritage-preview { position: relative; isolation: isolate; container-type: inline-size; display: grid; place-items: center; overflow: hidden; background: #f6f4f1; color: #000; }
+.heritage-cover-art { position: relative; width: 100%; aspect-ratio: 1672 / 941; transform-origin: center; transition: transform 500ms cubic-bezier(.2, .7, .2, 1); }
+.heritage-diamonds { display: block; width: 100%; height: auto; }
+.heritage-trail-video { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; opacity: 0; pointer-events: none; }
+.heritage-trail-video.is-playing { opacity: 1; }
+.heritage-cover-title { position: absolute; inset: 0; display: grid; place-items: center; padding: 20px; font-family: var(--font-display); font-size: clamp(18px, 6.4cqw, 104px); line-height: 1.15; font-weight: 500; letter-spacing: -.035em; text-align: center; pointer-events: none; }
+.heritage-preview.case-editorial { aspect-ratio: 1672 / 941; background: #f6f4f1; }
+:is(.project-card, .reel-card):focus-visible .heritage-cover-art { transform: scale(1.06); }
+@media (hover: hover) and (pointer: fine) {
+  :is(.project-card, .reel-card):hover .heritage-cover-art { transform: scale(1.06); }
+}
 [data-theme='dark'] .heritage-preview { background: #d4d2cf; }
-[data-theme='dark'] .heritage-preview .editorial-art { filter: brightness(.86); }
+[data-theme='dark'] .heritage-cover-art { filter: brightness(.86); }
+@media (prefers-reduced-motion: reduce) {
+  .heritage-trail-video { display: none; }
+  :is(.project-card, .reel-card):is(:hover, :focus-visible) .heritage-cover-art { transform: none; transition: none; }
+}
 :is(.project-card, .reel-card):focus-visible .editorial-art { transform: translateY(-6px) scale(1.06); }
 :is(.project-card, .reel-card):focus-visible .solver-preview-back { transform: translate(8px, -13px); }
 :is(.project-card, .reel-card):focus-visible .solver-preview-front { transform: translateX(10px); }
@@ -410,6 +432,8 @@ h1, h2, h3 { font-family: var(--font-display); }
 .story-section ul, .story-section ol { margin: 16px 0; padding-left: 24px; }
 .story-section li { margin-block: 8px; padding-left: 4px; }
 .story-image { width: 100%; margin-top: 24px; border-radius: 8px; background: #fff; }
+.story-image-link { display: block; }
+.story-image-link .story-image { height: auto; }
 .ism-research-figure, .ism-persona-figure { margin: 0; }
 .ism-research-canvas, .ism-persona-image { height: auto; margin-top: 0; object-fit: contain; }
 .ism-prototype-link { display: block; overflow: hidden; margin-top: 24px; border-radius: 8px; }

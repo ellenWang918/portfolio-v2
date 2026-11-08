@@ -131,12 +131,59 @@ function SolverCover({ className = '', loading = 'lazy' }: { className?: string;
     <div className="preview-copy"><strong className="preview-title">Solver</strong><p>A clearer way to track Kaizen actions.</p></div>
   </div>;
 }
+function HeritageCover({ className = '', loading = 'lazy', animated = true }: { className?: string; loading?: 'eager' | 'lazy'; animated?: boolean }) {
+  const coverRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [playing, setPlaying] = useState(false);
+  useEffect(() => {
+    const card = coverRef.current?.closest<HTMLElement>('.project-card, .reel-card');
+    const video = videoRef.current;
+    if (!card || !video) return;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+    const stop = () => {
+      video.pause();
+      video.currentTime = 0;
+      setPlaying(false);
+    };
+    const play = () => {
+      if (reducedMotion.matches) return;
+      video.currentTime = 0;
+      setPlaying(true);
+      void video.play().catch(() => setPlaying(false));
+    };
+    const enter = (event: PointerEvent) => {
+      if (event.pointerType !== 'touch' && finePointer.matches) play();
+    };
+    const leave = () => { if (!card.matches(':focus-visible')) stop(); };
+    const focus = () => { if (card.matches(':focus-visible')) play(); };
+    const blur = () => { if (!card.matches(':hover') || !finePointer.matches) stop(); };
+    card.addEventListener('pointerenter', enter);
+    card.addEventListener('pointerleave', leave);
+    card.addEventListener('focusin', focus);
+    card.addEventListener('focusout', blur);
+    reducedMotion.addEventListener('change', stop);
+    return () => {
+      video.pause();
+      card.removeEventListener('pointerenter', enter);
+      card.removeEventListener('pointerleave', leave);
+      card.removeEventListener('focusin', focus);
+      card.removeEventListener('focusout', blur);
+      reducedMotion.removeEventListener('change', stop);
+    };
+  }, [animated]);
+  return <div ref={coverRef} className={`heritage-preview ${className}`}>
+    <div className="heritage-cover-art" aria-hidden="true">
+      <img className="heritage-diamonds" src={assetUrl('/assets/heritage-schedule-diamonds-v2.png')} alt="" width={1672} height={941} loading={loading} />
+      {animated && <video ref={videoRef} className={`heritage-trail-video ${playing ? 'is-playing' : ''}`} src={assetUrl('/assets/heritage-diamond-breathing-v4.mp4')} muted loop playsInline preload="none" tabIndex={-1} />}
+    </div>
+    <strong className="heritage-cover-title">Heritage Schedule</strong>
+  </div>;
+}
 function ProjectArtwork({ index, className = '' }: ProjectArtworkProps) {
   if (projects[index].id === 'design-system-palms') return <PalmsMotionCover className={`artwork artwork-${index} ${className}`} />;
   if (projects[index].id === 'feature-improvement-sps') return <SolverCover className={`artwork artwork-${index} ${className}`} />;
-  if (projects[index].id === 'rapid-discovery-ism') return <div className={`artwork artwork-${index} heritage-preview ${className}`}>
-    <img className="editorial-art" src={assetUrl(projects[index].hero.src)} alt={projects[index].hero.alt} width={1672} height={941} loading="lazy" />
-  </div>;
+  if (projects[index].id === 'rapid-discovery-ism') return <HeritageCover className={`artwork artwork-${index} ${className}`} />;
   return <div className={`artwork artwork-${index} ${className}`}>
     <span className="artwork-label" aria-hidden="true">{outcomes[index].category}</span>
     <img className="editorial-art" src={assetUrl(projects[index].hero.src)} alt={projects[index].hero.alt} loading="lazy" />
@@ -339,7 +386,7 @@ function CaseStudy({ id }: { id: ProjectId }) {
         </div>
       </aside>
       <article id="case-article" className="case-content" ref={articleRef}>
-        {id === 'design-system-palms' ? <PalmsMotionCover className="case-editorial" controls /> : id === 'feature-improvement-sps' ? <SolverCover className="case-editorial" loading="eager" /> : id === 'rapid-discovery-ism' ? <img className="case-editorial heritage-schedule-cover" src={assetUrl('/assets/heritage-schedule-cover-v1.png')} alt="Heritage Schedule, with a softly faded dotted double diamond on a pale warm-grey background" width={1672} height={941} fetchPriority="high" /> : <img className="case-editorial" src={assetUrl(project.hero.src)} alt={project.hero.alt} />}
+        {id === 'design-system-palms' ? <PalmsMotionCover className="case-editorial" controls /> : id === 'feature-improvement-sps' ? <SolverCover className="case-editorial" loading="eager" /> : id === 'rapid-discovery-ism' ? <HeritageCover className="case-editorial" loading="eager" animated={false} /> : <img className="case-editorial" src={assetUrl(project.hero.src)} alt={project.hero.alt} />}
         <div className="case-copy"><div className="project-tags">{project.tags.map(tag => <span className="badge" key={tag}>{tag}</span>)}</div><h1 id="case-title">{project.title}</h1><p className="case-summary">{project.summary}</p><dl className="case-metadata">{project.metadata.map(m => <div key={m.label}><dt className="mono">{m.label}</dt><dd>{m.value}</dd></div>)}</dl>
     {sections.map((section, i) => <section className={`story-section ${id === 'design-system-palms' && section.header === 'Background' ? 'palms-background' : id === 'design-system-palms' && section.header === 'My approach' ? 'palms-approach' : ''}`} id={`case-section-${i}`} key={section.header}>
       <div className="story-heading"><span className="mono">0{i + 1}</span><h2>{section.header}</h2></div>
@@ -349,6 +396,7 @@ function CaseStudy({ id }: { id: ProjectId }) {
         : id === 'feature-improvement-sps' && section.header === 'Approach' ? <SolverApproach content={section.content} />
         : id === 'feature-improvement-sps' && section.header === 'Solution' ? <><StoryContent content={section.content} /><img className="story-image solver-solution-workflow" src={assetUrl('/assets/solver-kaizen-solution-workflow.png')} alt="Five stages of the Kaizen workflow: prepare charter, sponsor approval, run event, follow up actions, and complete and share." width={2055} height={765} loading="lazy" /></>
         : id === 'feature-improvement-sps' && section.header === 'My contribution' ? <><StoryContent content={section.content} /><StoryVideo src="/assets/kaizen-task-click-demo-v1.mp4" label="Kaizen task interaction demo" /></>
+        : id === 'business-process-improvement-plm' && section.header === 'What we accomplished' ? <><StoryContent content={section.content} /><a className="story-image-link" href={assetUrl('/assets/digital-checklist-original-blueprint-blurred-public.png')} target="_blank" rel="noreferrer" aria-label="View full-size Digital Checklist service blueprint"><img className="story-image" src={assetUrl('/assets/digital-checklist-original-blueprint-blurred-public.png')} alt="Digital Checklist service blueprint mapping inspection activities, customer journeys, people, systems and supporting processes. Details are blurred for public viewing." width={1530} height={1028} loading="lazy" /></a></>
         : id === 'rapid-discovery-ism' && section.header === 'Executive summary' ? <><StoryContent content={section.content} /><StoryVideo src="/assets/heritage-schedule-flow-v2.mp4" label="Heritage Schedule: log in, open Annual baseline and explore the Gantt chart and configuration" /></>
         : id === 'rapid-discovery-ism' && section.header === 'Research' ? <><StoryContent content={section.content} /><figure className="ism-research-figure"><img className="story-image ism-research-canvas" src={assetUrl('/assets/ism-alignment-canvas-v2.png')} alt="Eight-section alignment canvas covering the problem, customer, current state, vision, priorities, deliverables, risks and next steps. Sticky-note answers and embedded images are blurred." width={1953} height={805} loading="lazy" /><figcaption>Product Alignment Canvas</figcaption></figure></>
         : id === 'rapid-discovery-ism' && section.header === 'Define' ? <div className="ism-define-layout" ref={defineLayoutRef}><div className="ism-define-copy"><StoryContent content={section.content} /></div><figure className="ism-persona-figure"><a href={assetUrl('/assets/planner_persona.png')} target="_blank" rel="noreferrer" aria-label="View full-size Heritage Planner persona"><img className="story-image ism-persona-image" src={assetUrl('/assets/planner_persona.png')} alt="Illustrative Heritage Planner persona wearing a safety helmet. Goals focus on keeping activities on track, coordinating changes and identifying at-risk work. Needs include current work requests, reliable schedules and clear handovers; pains include slow macros, manual rescheduling and fragmented data." width={752} height={1084} loading="lazy" /></a><figcaption>Heritage Planner persona</figcaption></figure></div>
