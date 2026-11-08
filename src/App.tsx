@@ -2,6 +2,7 @@ import { Fragment, useEffect, useId, useLayoutEffect, useRef, useState } from 'r
 import { createPortal } from 'react-dom';
 
 import type { Icon as PhosphorIcon } from '@phosphor-icons/react';
+import type { CSSProperties } from 'react';
 import { Eye, Heart, Paperclip, X, Stack, Sparkle, MapPin, Sun, Moon, EnvelopeSimple, LinkedinLogo, GithubLogo, Check, Copy, CaretLeft, CaretRight, CaretUp, ArrowRight, ArrowLeft, Pause, Play, ArrowCounterClockwise } from '@phosphor-icons/react';
 import projects from './data/projects.json';
 import { CapsuleNav } from './CapsuleNav';
@@ -273,37 +274,85 @@ function InlineText({ text }: { text: string }) {
   return text.split(/(\*\*[^*]+\*\*)/g).map((piece, i) => piece === '**digital charter**' ? <CharterDefinition key={i} /> : piece.startsWith('**') ? <strong key={i}>{piece.slice(2, -2)}</strong> : piece);
 }
 function ApproachCards({ content, results }: { content: string; results: string[] }) {
-  const [flipped, setFlipped] = useState<number[]>([]);
+  const [active, setActive] = useState(0);
+  const [drag, setDrag] = useState(0);
+  const gesture = useRef<{ x: number; y: number; dragging: boolean } | null>(null);
+  const trackRef = useRef<HTMLOListElement>(null);
+  const focusTarget = useRef<number | null>(null);
   const descriptionId = useId();
   const blocks = content.split(/\n\s*\n/).filter(Boolean);
   const steps = blocks.flatMap(block => block.split('\n')).filter(line => /^\d+\. /.test(line));
-  return <><StoryContent content={blocks.filter(block => !/^\d+\. /.test(block)).join('\n\n')} /><ol className="result-cards">{steps.map((step, i) => {
+  useLayoutEffect(() => {
+    if (focusTarget.current === null) return;
+    trackRef.current?.querySelectorAll<HTMLDivElement>('.result-card')[focusTarget.current]?.focus({ preventScroll: true });
+    focusTarget.current = null;
+  }, [active]);
+  const select = (index: number, focus = false) => {
+    const next = (index + steps.length) % steps.length;
+    if (focus) focusTarget.current = next;
+    setActive(next);
+  };
+  const activeTitle = steps[active]?.match(/\*\*(.*?)\*\*/)?.[1];
+  return <><StoryContent content={blocks.filter(block => !/^\d+\. /.test(block)).join('\n\n')} />
+    <div className="approach-coverflow" role="region" aria-roledescription="carousel" aria-label="PALMS approach steps" onKeyDown={event => {
+      if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+      event.preventDefault();
+      select(event.key === 'Home' ? 0 : event.key === 'End' ? steps.length - 1 : active + (event.key === 'ArrowRight' ? 1 : -1), true);
+    }}>
+    <div className="approach-coverflow-body"><div className={`approach-coverflow-stage ${drag ? 'is-dragging' : ''}`}
+      onPointerDown={event => {
+        if (!event.isPrimary || event.button !== 0) return;
+        gesture.current = { x: event.clientX, y: event.clientY, dragging: false };
+      }}
+      onPointerMove={event => {
+        const start = gesture.current;
+        if (!start) return;
+        const dx = event.clientX - start.x;
+        if (!start.dragging && Math.abs(event.clientY - start.y) > Math.max(8, Math.abs(dx))) { gesture.current = null; return; }
+        if (!start.dragging && Math.abs(dx) > 8) {
+          start.dragging = true;
+          event.currentTarget.setPointerCapture(event.pointerId);
+        }
+        if (start.dragging) setDrag(Math.max(-160, Math.min(160, dx)));
+      }}
+      onPointerUp={event => {
+        const start = gesture.current;
+        if (start?.dragging && Math.abs(event.clientX - start.x) > 40) select(active + (event.clientX < start.x ? 1 : -1));
+        gesture.current = null;
+        setDrag(0);
+      }}
+      onPointerCancel={() => { gesture.current = null; setDrag(0); }}>
+    <ol ref={trackRef} className="result-cards" role="list">{steps.map((step, i) => {
     const match = step.match(/^\d+\. \*\*(.*?)\*\*\s*(.*)$/);
     if (!match) return null;
-    const open = flipped.includes(i);
     const approachId = `${descriptionId}-${i}-approach`;
-    const resultId = `${descriptionId}-${i}-result`;
-    return <li key={match[1]}>
-      <button type="button" className={`result-card ${open ? 'is-flipped' : ''}`}
-        aria-pressed={open}
-        aria-label={`${i + 1}. ${match[1]}. ${open ? 'Show approach' : 'Show result'}`}
-        aria-describedby={open ? resultId : approachId}
-        onClick={() => setFlipped(previous => previous.includes(i) ? previous.filter(value => value !== i) : [...previous, i])}>
-        <span className="result-card-inner">
-          <span className="result-card-front" aria-hidden={open}>
+    const depth = (i - active + steps.length) % steps.length;
+    return <li key={match[1]} className={depth === 0 ? 'is-current' : ''} aria-hidden={depth !== 0} inert={depth !== 0} style={{
+      '--panel-x': `${Math.min(depth, 2) * 10}px`, '--panel-y': `${Math.min(depth, 2) * -10}px`,
+      '--panel-scale': 1 - Math.min(depth, 2) * 0.02, '--drag-x': `${depth === 0 ? drag * 0.6 : 0}px`,
+      zIndex: steps.length - depth, opacity: depth > 2 ? 0 : 1, visibility: depth > 2 ? 'hidden' : 'visible',
+    } as CSSProperties}>
+      <div className="result-card" role="group"
+        tabIndex={depth === 0 ? 0 : -1}
+        aria-label={`${i + 1}. ${match[1]}`}
+        aria-describedby={`${approachId} ${descriptionId}-result`}>
+          <span className="result-card-front">
             <span className="result-card-number">{String(i + 1).padStart(2, '0')}</span>
             <strong>{match[1]}</strong><span id={approachId}>{match[2]}</span>
-            <span className="result-card-hint">View result ↗</span>
           </span>
-          <span className="result-card-back" aria-hidden={!open}>
-            <span className="result-card-number">{String(i + 1).padStart(2, '0')}</span>
-            <strong>The result</strong><span id={resultId}>{results[i]}</span>
-            <span className="result-card-hint">Back to approach ↩</span>
-          </span>
-        </span>
-      </button>
+      </div>
     </li>;
-  })}</ol></>;
+  })}</ol>
+    <div className="approach-viewfinder" aria-hidden="true"><span /><span /><span /><span /></div>
+    </div>
+    <div className="approach-result" aria-live="polite" aria-atomic="true"><h3>The result</h3><p id={`${descriptionId}-result`}>{results[active]}</p></div>
+    </div>
+    <div className="approach-coverflow-footer">
+      <button type="button" aria-label="Previous approach step" onClick={() => select(active - 1)}><CaretLeft size={18} aria-hidden="true" /></button>
+      <div aria-live="polite" aria-atomic="true"><strong>{activeTitle}</strong><span>{String(active + 1).padStart(2, '0')} / {String(steps.length).padStart(2, '0')}</span></div>
+      <button type="button" aria-label="Next approach step" onClick={() => select(active + 1)}><CaretRight size={18} aria-hidden="true" /></button>
+    </div>
+    </div></>;
 }
 function StoryVideo({ src, label }: { src: string; label: string }) {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -440,6 +489,10 @@ export function App() {
         if (section.getBoundingClientRect().top > readingLine) break;
         current = section.id;
       }
+      // A short final section may never reach the reading line before scrolling ends.
+      const atPageEnd = window.scrollY > 0
+        && window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2;
+      if (atPageEnd) current = sections.at(-1)?.id ?? current;
       setActiveSection(current);
     };
     const onScroll = () => { if (!frame) frame = requestAnimationFrame(updateActiveSection); };

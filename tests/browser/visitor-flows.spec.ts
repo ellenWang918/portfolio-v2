@@ -65,23 +65,24 @@ test('About tabs support keyboard selection', async ({ page }) => {
   await expect(page.getByRole('tabpanel')).toContainText('Curious by nature.');
 });
 
-test('all PALMS flip cards expose the active description and preserve keyboard focus', async ({ page }) => {
+test('PALMS cards and matching results share the frame and support keyboard navigation', async ({ page }) => {
   await page.goto('./work/design-system-palms');
   const cards = page.locator('.result-card');
+  const result = page.locator('.approach-coverflow > .approach-coverflow-body > .approach-result p');
   await expect(cards).toHaveCount(7);
   for (let i = 0; i < 7; i++) {
     const card = cards.nth(i);
     const approach = await card.locator('.result-card-front > span[id]').innerText();
-    await expect(card).toHaveAccessibleDescription(approach);
+    await expect(result).toHaveText(projects[0].approachResults![i]);
+    await expect(card).toHaveAccessibleDescription(`${approach} ${projects[0].approachResults![i]}`);
     await card.focus();
-    await card.press('Enter');
-    await expect(card).toHaveAttribute('aria-pressed', 'true');
-    await expect(card).toHaveAccessibleDescription(projects[0].approachResults![i]);
-    await expect(card).toBeFocused();
-    await card.press('Space');
-    await expect(card).toHaveAttribute('aria-pressed', 'false');
-    await expect(card).toHaveAccessibleDescription(approach);
+    await card.press('ArrowRight');
+    await expect(cards.nth((i + 1) % 7)).toBeFocused();
   }
+  await page.getByRole('button', { name: 'Previous approach step', exact: true }).click();
+  await expect(result).toHaveText(projects[0].approachResults![6]);
+  await page.getByRole('button', { name: 'Next approach step', exact: true }).click();
+  await expect(result).toHaveText(projects[0].approachResults![0]);
 });
 
 test('contact copies the email address', async ({ page }) => {
@@ -94,6 +95,30 @@ test('contact copies the email address', async ({ page }) => {
   await page.getByRole('button', { name: 'Copy email address', exact: true }).click();
   await expect(page.getByRole('button', { name: 'Email address copied' })).toBeVisible();
   await expect(page.locator('html')).toHaveAttribute('data-copied-email', 'ellenwang918@gmail.com');
+});
+
+test('Contact keeps the navigation pill at the page end after pointer exit and reload', async ({ page, isMobile }) => {
+  if (!isMobile) await page.setViewportSize({ width: 1300, height: 1300 });
+  await page.goto('./');
+  const navigation = page.getByRole('navigation', { name: 'Main navigation' });
+  const contact = navigation.getByRole('link', { name: 'Contact', exact: true });
+  await contact.click();
+  await page.mouse.move(0, 0);
+  await expect(contact).toHaveAttribute('aria-current', 'location');
+  await expect.poll(() => navigation.evaluate(nav => {
+    const pill = nav.querySelector('.nav-pill')!.getBoundingClientRect();
+    const item = nav.querySelector('a[href="#contact"]')!.getBoundingClientRect();
+    return Math.abs((pill.left + pill.width / 2) - (item.left + item.width / 2));
+  })).toBeLessThan(2);
+  await page.reload();
+  await expect(contact).toHaveAttribute('aria-current', 'location');
+  const work = navigation.getByRole('link', { name: 'Work', exact: true });
+  await work.click();
+  await page.mouse.move(0, 0);
+  await expect(work).toHaveAttribute('aria-current', 'location');
+  await contact.click();
+  await page.mouse.move(0, 0);
+  await expect(contact).toHaveAttribute('aria-current', 'location');
 });
 
 test('contact remains usable when clipboard access is denied', async ({ page }) => {

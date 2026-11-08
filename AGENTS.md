@@ -55,6 +55,8 @@ Keep routine completion updates concise and omit preview images unless the user 
 
 Keep the pill navigation fixed at the bottom centre of the viewport on desktop and mobile, with safe-area spacing and enough footer clearance to keep links accessible.
 
+Keep Contact selected in the bottom navigation when the page reaches its bottom, even when the short Contact section cannot reach the usual scroll position used for section selection. The white pill must stay on Contact after pointer exit, including on tall desktop viewports and mobile, and resume normal section tracking when scrolling upward.
+
 Show "Available for work" in the top-right header instead of location details, preceded by a green dot with a soft, diffused glow. Keep the status readable on desktop and mobile.
 
 Preserve the logo and availability row's original top padding: 28px on desktop and tablet, and 20px on mobile. Requests for Home header section spacing refer to the introduction, not the logo row.
@@ -184,7 +186,7 @@ Preserve the team quotes image's intrinsic aspect ratio with height auto and obj
 
 Display each of the seven PALMS My approach steps in its own numbered card with theme-aware surfaces and responsive padding, preserving the text and order.
 
-Lay out PALMS approach cards in three columns on wide screens, two columns at 1055px and below, and one column at 671px and below. Keep the number above the title and the description below it.
+Keep the number above the title and the description below it in the PALMS approach cards. Preserve the compact stack on desktop and mobile.
 
 Use #f0f3f5 as the PALMS approach cards' light-theme background; retain the existing dark-theme surface.
 
@@ -198,7 +200,7 @@ Make all case-study diffuse backgrounds span the full screen width, including th
 Scatter subtle static cyan and lime diffuse glows at irregular positions down case-study bodies, preserving text readability, with responsive mobile sizing and reduced dark-mode opacity.
 
 
-PALMS approach cards flip on click, tap, Enter or Space between the existing approach and the approved corresponding result. Preserve the responsive grid, #f0f3f5 light surface, 24px Space Grotesk numbers, dark theme and reduced-motion support. Do not add hover tilt.
+In PALMS My approach, keep the description card stack and its corresponding result together inside the same existing outer frame. Put the description card on the left and the result as plain text on the right, with the arrow navigation footer spanning the frame beneath both. At 767px and below, stack the result below the card inside the same frame. Remove the card flip and flip hints. Preserve #f0f3f5 description surfaces, 24px Space Grotesk numbers, dark theme and reduced-motion support. Do not add hover tilt.
 
 Use the user-supplied public/assets/Group 14.svg as the current design system foundations image wherever that artwork is displayed.
 
@@ -206,10 +208,10 @@ Use 24px numbers on PALMS approach cards, preserving the existing title and body
 
 Use Space Grotesk for the PALMS approach card numbers, keeping 24px size and regular weight.
 
-Use #f0f3f5 for PALMS approach card fronts and #e3f4f7 for result backs in the light theme; preserve existing dark-theme surfaces.
+Use #f0f3f5 for PALMS approach description cards in the light theme; preserve the existing dark-theme surface. The result text has no separate card, border or background and stays within the shared outer frame.
 
 
-Use plain PALMS flip cards without notebook ruling, punched holes, folded corners or paper shadows. Preserve grey fronts, pale cyan backs and 24px Space Grotesk numbers.
+Use a compact stack for PALMS My approach, with the other description cards sitting just behind the current card and only their edges visible. Preserve seven steps, arrow and swipe navigation, keyboard navigation, grey cards and 24px Space Grotesk numbers. Update the result beside the card as the selected step changes.
 
 Start Feature Improvement & MVP Validation with Executive summary, using the approved three-paragraph summary covering the fragmented Kaizen process, the Kanban MVP contribution, and usability findings with the post-launch evidence limitation. Keep Background immediately after Executive summary, using the approved three-paragraph narrative covering Solver within Rio Tinto’s Safe Production System, the fragmented Kaizen workflow, and introducing Kaizen into Solver with accountability and flexibility.
 
